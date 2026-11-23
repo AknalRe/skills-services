@@ -1,0 +1,20 @@
+services:
+  reneo-skills:
+    build: .
+    container_name: reneo-skills
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5055}:5055"
+    environment:
+      NODE_ENV: production
+      PORT: 5055
+      DATA_DIR: /app/data
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@reneo.my.id}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-reneo-admin-2026}
+      SESSION_SECRET: ${SESSION_SECRET:-change-this-session-secret}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://skills.reneo.my.id}
+    volumes:
+      - skills_data:/app/data
+
+volumes:
+  skills_data:
