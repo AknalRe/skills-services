@@ -51,6 +51,7 @@ export function getDb(customPath?: string): DatabaseSync {
       skill_markdown TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'published' CHECK(status IN ('published', 'draft')),
       featured INTEGER NOT NULL DEFAULT 0,
+      is_official INTEGER NOT NULL DEFAULT 0,
       download_count INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
@@ -72,6 +73,13 @@ export function getDb(customPath?: string): DatabaseSync {
     CREATE INDEX IF NOT EXISTS idx_skills_category ON skills(category_id);
     CREATE INDEX IF NOT EXISTS idx_skill_files_skill ON skill_files(skill_id);
   `);
+
+  // Safe migration for existing databases missing is_official
+  const columns = db.prepare("PRAGMA table_info(skills)").all() as Array<{ name: string }>;
+  if (!columns.some((col) => col.name === "is_official")) {
+    db.exec("ALTER TABLE skills ADD COLUMN is_official INTEGER NOT NULL DEFAULT 0;");
+    db.exec("UPDATE skills SET is_official = 1 WHERE lower(slug) LIKE '%reneo%' OR lower(name) LIKE '%reneo%';");
+  }
 
   seedInitialData(db);
 
@@ -109,8 +117,8 @@ function seedInitialData(db: DatabaseSync): void {
   const insertSkill = db.prepare(`
     INSERT OR IGNORE INTO skills (
       slug, name, summary, category_id, version, author,
-      tags, compatible_agents, skill_markdown, status, featured
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', ?)
+      tags, compatible_agents, skill_markdown, status, featured, is_official
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?)
   `);
 
   for (const s of BUILTIN_SKILLS) {
@@ -125,7 +133,8 @@ function seedInitialData(db: DatabaseSync): void {
       JSON.stringify(s.tags),
       JSON.stringify(s.agents),
       s.markdown,
-      s.featured
+      s.featured,
+      s.isOfficial
     );
   }
 }

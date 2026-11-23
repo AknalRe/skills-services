@@ -17,6 +17,7 @@ export function GalleryPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [activeAgent, setActiveAgent] = useState("");
+  const [activeSource, setActiveSource] = useState<"" | "official" | "community">("");
   const [sort, setSort] = useState("featured");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [copiedQuick, setCopiedQuick] = useState(false);
@@ -30,6 +31,7 @@ export function GalleryPage() {
           q: search.trim() || undefined,
           category: activeCategory || undefined,
           agent: activeAgent || undefined,
+          source: activeSource || undefined,
           sort,
         }),
         api.listCategories(),
@@ -42,7 +44,7 @@ export function GalleryPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, activeCategory, activeAgent, sort]);
+  }, [search, activeCategory, activeAgent, activeSource, sort]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -51,12 +53,13 @@ export function GalleryPage() {
     return () => window.clearTimeout(timer);
   }, [loadData]);
 
-  const hasFilters = Boolean(search.trim() || activeCategory || activeAgent);
+  const hasFilters = Boolean(search.trim() || activeCategory || activeAgent || activeSource);
 
   const resetFilters = () => {
     setSearch("");
     setActiveCategory("");
     setActiveAgent("");
+    setActiveSource("");
     setSort("featured");
   };
 
@@ -263,38 +266,72 @@ export function GalleryPage() {
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter kategori">
-          <button
-            type="button"
-            onClick={() => setActiveCategory("")}
-            className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
-            style={{
-              backgroundColor: activeCategory === "" ? "var(--accent-tint)" : "transparent",
-              borderColor: activeCategory === "" ? "var(--accent-border)" : "transparent",
-              color: activeCategory === "" ? "var(--accent-text)" : "var(--ink-muted)",
-            }}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter kategori">
+            <button
+              type="button"
+              onClick={() => setActiveCategory("")}
+              className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
+              style={{
+                backgroundColor: activeCategory === "" ? "var(--accent-tint)" : "transparent",
+                borderColor: activeCategory === "" ? "var(--accent-border)" : "transparent",
+                color: activeCategory === "" ? "var(--accent-text)" : "var(--ink-muted)",
+              }}
+            >
+              Semua kategori
+            </button>
+            {categories.map((cat) => {
+              const active = activeCategory === cat.slug;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setActiveCategory(cat.slug)}
+                  className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
+                  style={{
+                    backgroundColor: active ? "var(--accent-tint)" : "transparent",
+                    borderColor: active ? "var(--accent-border)" : "transparent",
+                    color: active ? "var(--accent-text)" : "var(--ink-muted)",
+                  }}
+                >
+                  {cat.name}{" "}
+                  <span className="font-mono text-[11px] opacity-75">({cat.published_count ?? 0})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            className="inline-flex h-7 items-center rounded-md border p-0.5"
+            style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+            role="group"
+            aria-label="Filter sumber skill"
           >
-            Semua kategori
-          </button>
-          {categories.map((cat) => {
-            const active = activeCategory === cat.slug;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveCategory(cat.slug)}
-                className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
-                style={{
-                  backgroundColor: active ? "var(--accent-tint)" : "transparent",
-                  borderColor: active ? "var(--accent-border)" : "transparent",
-                  color: active ? "var(--accent-text)" : "var(--ink-muted)",
-                }}
-              >
-                {cat.name}{" "}
-                <span className="font-mono text-[11px] opacity-75">({cat.published_count ?? 0})</span>
-              </button>
-            );
-          })}
+            {(
+              [
+                { value: "", label: "Semua" },
+                { value: "official", label: "Official Reneo" },
+                { value: "community", label: "Non-Official" },
+              ] as const
+            ).map((opt) => {
+              const active = activeSource === opt.value;
+              return (
+                <button
+                  key={opt.value || "all"}
+                  type="button"
+                  onClick={() => setActiveSource(opt.value)}
+                  aria-pressed={active}
+                  className="h-6 rounded px-2 text-[11px] font-medium transition-colors"
+                  style={{
+                    backgroundColor: active ? "var(--surface-elevated)" : "transparent",
+                    color: active ? "var(--accent-text)" : "var(--ink-muted)",
+                  }}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 

@@ -51,11 +51,12 @@ export const api = {
     request<{ ok: boolean }>(`/api/admin/categories/${id}`, { method: "DELETE" }),
 
   // Public skills
-  listPublicSkills: (params?: { q?: string; category?: string; agent?: string; sort?: string }) => {
+  listPublicSkills: (params?: { q?: string; category?: string; agent?: string; source?: string; sort?: string }) => {
     const query = new URLSearchParams();
     if (params?.q) query.set("q", params.q);
     if (params?.category) query.set("category", params.category);
     if (params?.agent) query.set("agent", params.agent);
+    if (params?.source) query.set("source", params.source);
     if (params?.sort) query.set("sort", params.sort);
     const qs = query.toString();
     return request<{ skills: Skill[]; stats: PublicStats }>(`/api/skills${qs ? `?${qs}` : ""}`);

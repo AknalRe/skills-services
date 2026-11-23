@@ -44,6 +44,18 @@ export function SkillCard({ skill, layout = "grid" }: SkillCardProps) {
                   {skill.name}
                 </Link>
               </h2>
+              {skill.is_official && (
+                <span
+                  className="inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-semibold leading-none"
+                  style={{
+                    backgroundColor: "var(--accent-tint)",
+                    borderColor: "var(--accent-border)",
+                    color: "var(--accent-text)",
+                  }}
+                >
+                  Official Reneo
+                </span>
+              )}
               <span className="font-mono text-[11px]" style={{ color: "var(--ink-muted)" }}>
                 v{skill.version}
               </span>
@@ -103,11 +115,25 @@ export function SkillCard({ skill, layout = "grid" }: SkillCardProps) {
               {renderCategoryGlyph(skill.category_slug)}
             </div>
             <div className="min-w-0">
-              <h2 className="truncate text-[15px] font-semibold tracking-tight" style={{ color: "var(--ink)" }}>
-                <Link to={`/skills/${skill.slug}`} className="no-underline hover:underline">
-                  {skill.name}
-                </Link>
-              </h2>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <h2 className="truncate text-[15px] font-semibold tracking-tight" style={{ color: "var(--ink)" }}>
+                  <Link to={`/skills/${skill.slug}`} className="no-underline hover:underline">
+                    {skill.name}
+                  </Link>
+                </h2>
+                {skill.is_official && (
+                  <span
+                    className="inline-flex shrink-0 items-center rounded border px-1.5 py-0.5 text-[10px] font-semibold leading-none"
+                    style={{
+                      backgroundColor: "var(--accent-tint)",
+                      borderColor: "var(--accent-border)",
+                      color: "var(--accent-text)",
+                    }}
+                  >
+                    Official Reneo
+                  </span>
+                )}
+              </div>
               <p className="truncate font-mono text-[11px]" style={{ color: "var(--ink-muted)" }}>
                 {skill.slug}
               </p>

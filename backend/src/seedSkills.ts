@@ -8,6 +8,7 @@ export interface SeedSkillEntry {
   tags: string[];
   agents: string[];
   featured: number;
+  isOfficial: number;
   markdown: string;
 }
 
@@ -23,6 +24,7 @@ export const BUILTIN_SKILLS: SeedSkillEntry[] = [
     tags: ["penawaran", "pdf", "invoice", "bisnis", "whatsapp"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor"],
     featured: 1,
+    isOfficial: 1,
     markdown: `---
 name: reneo-penawaran
 description: >-
@@ -72,6 +74,7 @@ Skill ini membakukan cara menyusun penawaran layanan digital **Reneo** (website,
     tags: ["ui", "anti-slop", "design-system", "aksesibilitas"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cline", "Cursor"],
     featured: 1,
+    isOfficial: 1,
     markdown: `---
 name: anti-slop-reneo
 description: >-
@@ -118,6 +121,7 @@ Setiap piksel dan baris kode harus punya alasan yang jelas.
     tags: ["audit", "ui", "ux", "review", "design"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor", "Gemini CLI"],
     featured: 1,
+    isOfficial: 0,
     markdown: `---
 name: design-ui-audit
 description: >-
@@ -161,6 +165,7 @@ Audit bukan redesign total: nilai apa yang ada, sebutkan bukti elemen spesifik, 
     tags: ["copywriting", "teks", "cta", "editorial"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor"],
     featured: 0,
+    isOfficial: 0,
     markdown: `---
 name: antislop-copywriting
 description: >-
@@ -197,6 +202,7 @@ description: >-
     tags: ["a11y", "wcag", "kontras", "keyboard", "ux"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor"],
     featured: 0,
+    isOfficial: 0,
     markdown: `---
 name: antislop-human
 description: >-
@@ -237,6 +243,7 @@ description: >-
     tags: ["reneo", "react", "golang", "release", "workflow"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor"],
     featured: 1,
+    isOfficial: 1,
     markdown: `---
 name: reneo-workflow
 description: >-
@@ -289,6 +296,7 @@ bun run release:patch
     tags: ["skills-services", "fastify", "sqlite", "docker", "ghcr"],
     agents: ["Antigravity", "Claude Code", "Codex"],
     featured: 0,
+    isOfficial: 1,
     markdown: `---
 name: reneo-skills-dev
 description: >-
@@ -329,6 +337,7 @@ Rilis image container melalui tag semver (\`git tag v1.x.y && git push origin v1
     tags: ["memory", "arsitektur", "workflow", "agent", "dokumentasi"],
     agents: ["Antigravity", "Claude Code", "Codex", "Cursor", "Gemini CLI"],
     featured: 0,
+    isOfficial: 0,
     markdown: `---
 name: project-memory
 description: >-

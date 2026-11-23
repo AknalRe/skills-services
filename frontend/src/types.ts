@@ -30,6 +30,7 @@ export interface Skill {
   skill_markdown?: string;
   status: "published" | "draft";
   featured: boolean;
+  is_official: boolean;
   download_count: number;
   file_count: number;
   created_at: string;

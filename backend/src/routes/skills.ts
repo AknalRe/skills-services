@@ -18,6 +18,7 @@ interface SkillRow {
   skill_markdown: string;
   status: "published" | "draft";
   featured: number;
+  is_official: number;
   download_count: number;
   file_count?: number;
   created_at: string;
@@ -36,6 +37,7 @@ interface SkillBody {
   skill_markdown?: string;
   status?: "published" | "draft";
   featured?: boolean;
+  is_official?: boolean;
 }
 
 interface SkillFileBody {
@@ -90,6 +92,7 @@ function formatSkill(row: SkillRow, includeMarkdown = false) {
     compatible_agents: safeParseArray(row.compatible_agents),
     status: row.status,
     featured: Boolean(row.featured),
+    is_official: Boolean(row.is_official),
     download_count: row.download_count,
     file_count: row.file_count ?? 0,
     created_at: row.created_at,
@@ -104,14 +107,15 @@ function formatSkill(row: SkillRow, includeMarkdown = false) {
 export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): void {
   // Public: list published skills with search, category, agent filter, and sort
   app.get<{
-    Querystring: { q?: string; category?: string; agent?: string; sort?: string };
+    Querystring: { q?: string; category?: string; agent?: string; source?: string; sort?: string };
   }>("/api/skills", async (request) => {
     const q = (request.query.q || "").trim().toLowerCase();
     const category = (request.query.category || "").trim().toLowerCase();
     const agent = (request.query.agent || "").trim().toLowerCase();
+    const source = (request.query.source || "").trim().toLowerCase();
     const sort = request.query.sort || "featured";
 
-    let orderClause = "s.featured DESC, s.updated_at DESC";
+    let orderClause = "s.is_official DESC, s.featured DESC, s.updated_at DESC";
     if (sort === "downloads") orderClause = "s.download_count DESC, s.name ASC";
     if (sort === "newest") orderClause = "s.created_at DESC";
     if (sort === "name") orderClause = "s.name ASC";
@@ -128,6 +132,8 @@ export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): voi
       .all() as unknown as SkillRow[];
 
     const filtered = rows.filter((row) => {
+      if (source === "official" && !row.is_official) return false;
+      if (source === "community" && row.is_official) return false;
       if (category && (row.category_slug || "").toLowerCase() !== category) {
         return false;
       }
@@ -336,14 +342,22 @@ export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): voi
       : ["Antigravity"];
     const status = request.body?.status === "draft" ? "draft" : "published";
     const featured = request.body?.featured ? 1 : 0;
+    const isOfficial =
+      request.body?.is_official !== undefined
+        ? request.body.is_official
+          ? 1
+          : 0
+        : slug.includes("reneo") || name.toLowerCase().includes("reneo")
+          ? 1
+          : 0;
 
     try {
       const info = db
         .prepare(`
           INSERT INTO skills (
             slug, name, summary, category_id, version, author,
-            tags, compatible_agents, skill_markdown, status, featured
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            tags, compatible_agents, skill_markdown, status, featured, is_official
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `)
         .run(
           slug,
@@ -356,7 +370,8 @@ export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): voi
           JSON.stringify(agents),
           markdown,
           status,
-          featured
+          featured,
+          isOfficial
         );
 
       const created = db
@@ -412,6 +427,8 @@ export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): voi
     const status =
       request.body?.status !== undefined ? (request.body.status === "draft" ? "draft" : "published") : existing.status;
     const featured = request.body?.featured !== undefined ? (request.body.featured ? 1 : 0) : existing.featured;
+    const isOfficial =
+      request.body?.is_official !== undefined ? (request.body.is_official ? 1 : 0) : existing.is_official;
 
     if (!name || !slug || !summary || !markdown) {
       return reply.code(400).send({ error: "Nama, slug, ringkasan, dan konten SKILL.md wajib diisi." });
@@ -421,10 +438,10 @@ export function registerSkillRoutes(app: FastifyInstance, db: DatabaseSync): voi
       db.prepare(`
         UPDATE skills SET
           slug = ?, name = ?, summary = ?, category_id = ?, version = ?, author = ?,
-          tags = ?, compatible_agents = ?, skill_markdown = ?, status = ?, featured = ?,
+          tags = ?, compatible_agents = ?, skill_markdown = ?, status = ?, featured = ?, is_official = ?,
           updated_at = datetime('now')
         WHERE id = ?
-      `).run(slug, name, summary, categoryId, version, author, tags, agents, markdown, status, featured, id);
+      `).run(slug, name, summary, categoryId, version, author, tags, agents, markdown, status, featured, isOfficial, id);
 
       const updated = db
         .prepare(`

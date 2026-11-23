@@ -21,6 +21,7 @@ interface SkillFormState {
   skill_markdown: string;
   status: "published" | "draft";
   featured: boolean;
+  is_official: boolean;
 }
 
 const EMPTY_FORM: SkillFormState = {
@@ -36,6 +37,7 @@ const EMPTY_FORM: SkillFormState = {
     "---\nname: nama-skill\ndescription: Jelaskan kapan skill ini dipakai.\n---\n\n# Judul Skill\n\nTuliskan instruksi langkah kerja di sini.\n",
   status: "published",
   featured: false,
+  is_official: false,
 };
 
 function parseFrontmatter(md: string): { name?: string; description?: string } {
@@ -136,6 +138,7 @@ export function AdminDashboardPage() {
       skill_markdown: skill.skill_markdown || "",
       status: skill.status,
       featured: skill.featured,
+      is_official: skill.is_official,
     });
     setEditorTab("write");
     setFormError(null);
@@ -192,6 +195,7 @@ export function AdminDashboardPage() {
       skill_markdown: form.skill_markdown,
       status: form.status,
       featured: form.featured,
+      is_official: form.is_official,
     };
 
     try {
@@ -881,7 +885,15 @@ export function AdminDashboardPage() {
               />
             </div>
 
-            <div className="flex items-end pb-2">
+            <div className="flex flex-col justify-end gap-1.5 pb-1">
+              <label className="inline-flex items-center gap-2 text-xs font-semibold" style={{ color: "var(--ink-body)" }}>
+                <input
+                  type="checkbox"
+                  checked={form.is_official}
+                  onChange={(e) => setForm({ ...form, is_official: e.target.checked })}
+                />
+                Tandai sebagai Official Reneo
+              </label>
               <label className="inline-flex items-center gap-2 text-xs font-semibold" style={{ color: "var(--ink-body)" }}>
                 <input
                   type="checkbox"

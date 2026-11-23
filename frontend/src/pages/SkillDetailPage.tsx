@@ -114,6 +114,18 @@ export function SkillDetailPage() {
         <div className="space-y-5 lg:col-span-8">
           <div className="border-b pb-5" style={{ borderColor: "var(--border)" }}>
             <div className="mb-2.5 flex flex-wrap items-center gap-2 text-xs">
+              {skill.is_official && (
+                <span
+                  className="inline-flex items-center rounded border px-2 py-0.5 text-[11px] font-semibold leading-none"
+                  style={{
+                    backgroundColor: "var(--accent-tint)",
+                    borderColor: "var(--accent-border)",
+                    color: "var(--accent-text)",
+                  }}
+                >
+                  Official Reneo
+                </span>
+              )}
               <span className="font-semibold" style={{ color: "var(--accent-text)" }}>
                 {skill.category_name || "Umum"}
               </span>
