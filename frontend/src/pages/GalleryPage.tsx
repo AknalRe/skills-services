@@ -75,161 +75,151 @@ export function GalleryPage() {
   };
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-7 sm:px-6 sm:py-9">
-      {/* Asymmetric hero header + live stats & quick install snippet */}
-      <section className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-center">
+    <main className="mx-auto max-w-6xl px-4 py-7 sm:px-6 sm:py-8">
+      {/* Header + inline metrics + compact CLI install bar */}
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-[34px]" style={{ color: "var(--ink)" }}>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-[32px]" style={{ color: "var(--ink)" }}>
             Galeri Skill Agent Reneo
           </h1>
-          <p className="mt-2.5 max-w-2xl text-[15px] leading-relaxed" style={{ color: "var(--ink-body)" }}>
-            Katalog terpusat untuk menyimpan, meninjau instruksi <code className="font-mono text-xs">SKILL.md</code>,
-            dan mengunduh paket skill lengkap beserta skrip pendukung untuk Antigravity, Claude Code, Codex, dan
-            agent coding lainnya.
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed sm:text-[15px]" style={{ color: "var(--ink-body)" }}>
+            Katalog terpusat untuk meninjau instruksi <code className="font-mono text-xs">SKILL.md</code> dan
+            mengunduh paket skill beserta skrip pendukung untuk Antigravity, Claude Code, Codex, dan agent lainnya.
           </p>
 
           {stats && (
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <div className="reneo-card flex items-center gap-3 px-4 py-2.5">
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs" style={{ color: "var(--ink-muted)" }}>
+              <span className="inline-flex items-center gap-1.5">
                 <span className="status-dot" style={{ backgroundColor: "var(--emerald)" }} aria-hidden="true" />
-                <div>
-                  <div className="font-mono text-base font-bold leading-none" style={{ color: "var(--ink)" }}>
-                    {stats.total_published}
-                  </div>
-                  <div className="mt-0.5 text-[11px]" style={{ color: "var(--ink-muted)" }}>
-                    Skill terbit
-                  </div>
-                </div>
-              </div>
-              <div className="reneo-card flex items-center gap-3 px-4 py-2.5">
-                <div>
-                  <div className="font-mono text-base font-bold leading-none" style={{ color: "var(--ink)" }}>
-                    {stats.total_downloads}
-                  </div>
-                  <div className="mt-0.5 text-[11px]" style={{ color: "var(--ink-muted)" }}>
-                    Total unduhan
-                  </div>
-                </div>
-              </div>
-              <div className="reneo-card flex items-center gap-3 px-4 py-2.5">
-                <div>
-                  <div className="font-mono text-base font-bold leading-none" style={{ color: "var(--ink)" }}>
-                    {categories.length}
-                  </div>
-                  <div className="mt-0.5 text-[11px]" style={{ color: "var(--ink-muted)" }}>
-                    Kategori aktif
-                  </div>
-                </div>
-              </div>
+                <strong className="font-mono font-semibold" style={{ color: "var(--ink)" }}>
+                  {stats.total_published}
+                </strong>{" "}
+                skill terbit
+              </span>
+              <span aria-hidden="true">·</span>
+              <span>
+                <strong className="font-mono font-semibold" style={{ color: "var(--ink)" }}>
+                  {stats.total_downloads}
+                </strong>{" "}
+                total unduhan
+              </span>
+              <span aria-hidden="true">·</span>
+              <span>
+                <strong className="font-mono font-semibold" style={{ color: "var(--ink)" }}>
+                  {categories.length}
+                </strong>{" "}
+                kategori
+              </span>
             </div>
           )}
         </div>
 
         <div
-          className="overflow-hidden rounded-[14px] border lg:col-span-5"
+          className="overflow-hidden rounded-[10px] border lg:col-span-5"
           style={{
             backgroundColor: "var(--code-bg)",
             borderColor: "var(--code-border)",
-            boxShadow: "var(--card-shadow)",
           }}
         >
           <div
-            className="flex items-center justify-between border-b px-4 py-2.5"
+            className="flex items-center justify-between border-b px-3.5 py-2"
             style={{ borderColor: "var(--code-border)" }}
           >
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-              <Terminal size={13} strokeWidth={1.75} aria-hidden="true" />
-              <span className="font-mono">Pasang cepat ({featuredSlug})</span>
+            <div className="flex min-w-0 items-center gap-1.5 text-[11px] font-medium text-slate-400">
+              <Terminal size={12} strokeWidth={1.75} aria-hidden="true" className="shrink-0" />
+              <span className="truncate font-mono">Pasang cepat: {featuredSlug}</span>
             </div>
             <button
               type="button"
               onClick={() => void copyQuick()}
-              className="inline-flex items-center gap-1 rounded-md border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-[11px] font-semibold text-slate-200 transition-colors hover:bg-slate-700"
+              className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border border-slate-700/80 bg-slate-800/70 px-2 text-[11px] font-medium text-slate-200 transition-colors hover:bg-slate-700"
             >
               {copiedQuick ? (
                 <>
-                  <Check size={12} strokeWidth={2} aria-hidden="true" />
+                  <Check size={11} strokeWidth={2} aria-hidden="true" />
                   Tersalin
                 </>
               ) : (
                 <>
-                  <Copy size={12} strokeWidth={1.75} aria-hidden="true" />
+                  <Copy size={11} strokeWidth={1.75} aria-hidden="true" />
                   Salin
                 </>
               )}
             </button>
           </div>
-          <pre className="overflow-x-auto p-4 font-mono text-[11.5px] leading-relaxed text-slate-200">
+          <pre className="reneo-code-scroll overflow-x-auto px-3.5 py-2.5 font-mono text-[11px] leading-relaxed text-slate-200">
             <code>{quickInstallCmd}</code>
           </pre>
         </div>
       </section>
 
-      {/* Unified Reneo filter toolbar */}
-      <section aria-label="Filter dan pencarian skill" className="reneo-card mt-7 p-4">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-end">
-          <div className="md:col-span-5">
-            <label htmlFor="skill-search" className="mb-1 block text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+      {/* Flat borderless filter toolbar */}
+      <section
+        aria-label="Filter dan pencarian skill"
+        className="mt-7 border-y py-4"
+        style={{ borderColor: "var(--border)" }}
+      >
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="relative flex-1">
+            <label htmlFor="skill-search" className="sr-only">
               Cari skill, tag, atau slug
             </label>
-            <div className="relative">
-              <Search
-                size={15}
-                strokeWidth={1.75}
-                aria-hidden="true"
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
-                style={{ color: "var(--ink-muted)" }}
-              />
-              <input
-                id="skill-search"
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Cari penawaran, anti-slop, linux..."
-                className="reneo-field min-h-[40px] w-full pl-9 pr-3 text-sm"
-              />
+            <Search
+              size={15}
+              strokeWidth={1.75}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
+              style={{ color: "var(--ink-muted)" }}
+            />
+            <input
+              id="skill-search"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Cari skill, tag, atau slug..."
+              className="reneo-field h-9 w-full pl-9 pr-3 text-sm"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div>
+              <label htmlFor="agent-filter" className="sr-only">
+                Kompatibilitas agent
+              </label>
+              <select
+                id="agent-filter"
+                value={activeAgent}
+                onChange={(e) => setActiveAgent(e.target.value)}
+                className="reneo-field reneo-select h-9 pl-3 text-xs font-medium"
+              >
+                <option value="">Semua agent</option>
+                {AGENT_OPTIONS.map((agent) => (
+                  <option key={agent} value={agent}>
+                    {agent}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          <div className="md:col-span-3">
-            <label htmlFor="agent-filter" className="mb-1 block text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-              Kompatibilitas agent
-            </label>
-            <select
-              id="agent-filter"
-              value={activeAgent}
-              onChange={(e) => setActiveAgent(e.target.value)}
-              className="reneo-field min-h-[40px] w-full px-3 text-sm"
-            >
-              <option value="">Semua agent</option>
-              {AGENT_OPTIONS.map((agent) => (
-                <option key={agent} value={agent}>
-                  {agent}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label htmlFor="sort-filter" className="sr-only">
+                Urutkan skill
+              </label>
+              <select
+                id="sort-filter"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="reneo-field reneo-select h-9 pl-3 text-xs font-medium"
+              >
+                <option value="featured">Unggulan</option>
+                <option value="downloads">Terbanyak</option>
+                <option value="newest">Terbaru</option>
+                <option value="name">Nama (A-Z)</option>
+              </select>
+            </div>
 
-          <div className="md:col-span-2">
-            <label htmlFor="sort-filter" className="mb-1 block text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-              Urutkan
-            </label>
-            <select
-              id="sort-filter"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="reneo-field min-h-[40px] w-full px-3 text-sm"
-            >
-              <option value="featured">Unggulan</option>
-              <option value="downloads">Terbanyak</option>
-              <option value="newest">Terbaru</option>
-              <option value="name">Nama (A-Z)</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-end gap-1.5 md:col-span-2">
             <div
-              className="inline-flex rounded-[10px] border p-0.5"
+              className="inline-flex h-9 items-center rounded-lg border p-0.5"
               style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
               role="group"
               aria-label="Mode tampilan"
@@ -239,26 +229,26 @@ export function GalleryPage() {
                 onClick={() => setViewMode("grid")}
                 aria-label="Tampilan kartu"
                 aria-pressed={viewMode === "grid"}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-[8px]"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors"
                 style={{
                   backgroundColor: viewMode === "grid" ? "var(--surface-elevated)" : "transparent",
                   color: viewMode === "grid" ? "var(--accent-text)" : "var(--ink-muted)",
                 }}
               >
-                <LayoutGrid size={15} strokeWidth={1.75} aria-hidden="true" />
+                <LayoutGrid size={14} strokeWidth={1.75} aria-hidden="true" />
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
                 aria-label="Tampilan daftar"
                 aria-pressed={viewMode === "list"}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-[8px]"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors"
                 style={{
                   backgroundColor: viewMode === "list" ? "var(--surface-elevated)" : "transparent",
                   color: viewMode === "list" ? "var(--accent-text)" : "var(--ink-muted)",
                 }}
               >
-                <List size={15} strokeWidth={1.75} aria-hidden="true" />
+                <List size={14} strokeWidth={1.75} aria-hidden="true" />
               </button>
             </div>
 
@@ -266,21 +256,22 @@ export function GalleryPage() {
               type="button"
               onClick={() => void loadData()}
               aria-label="Muat ulang daftar skill"
-              className="reneo-btn-ghost inline-flex h-10 w-10 items-center justify-center"
+              className="reneo-btn-ghost inline-flex h-9 w-9 items-center justify-center"
             >
-              <RefreshCw size={15} strokeWidth={1.75} aria-hidden="true" />
+              <RefreshCw size={14} strokeWidth={1.75} aria-hidden="true" />
             </button>
           </div>
         </div>
 
-        <div className="mt-3.5 flex flex-wrap items-center gap-1.5 border-t pt-3.5" role="group" aria-label="Filter kategori" style={{ borderColor: "var(--border)" }}>
+        <div className="mt-3 flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter kategori">
           <button
             type="button"
             onClick={() => setActiveCategory("")}
-            className="min-h-[32px] rounded-full px-3 text-xs font-semibold transition-colors"
+            className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
             style={{
-              backgroundColor: activeCategory === "" ? "var(--accent)" : "var(--surface)",
-              color: activeCategory === "" ? "#ffffff" : "var(--ink-body)",
+              backgroundColor: activeCategory === "" ? "var(--accent-tint)" : "transparent",
+              borderColor: activeCategory === "" ? "var(--accent-border)" : "transparent",
+              color: activeCategory === "" ? "var(--accent-text)" : "var(--ink-muted)",
             }}
           >
             Semua kategori
@@ -292,13 +283,15 @@ export function GalleryPage() {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategory(cat.slug)}
-                className="min-h-[32px] rounded-full px-3 text-xs font-semibold transition-colors"
+                className="h-7 rounded-md border px-2.5 text-xs font-medium transition-colors"
                 style={{
-                  backgroundColor: active ? "var(--accent)" : "var(--surface)",
-                  color: active ? "#ffffff" : "var(--ink-body)",
+                  backgroundColor: active ? "var(--accent-tint)" : "transparent",
+                  borderColor: active ? "var(--accent-border)" : "transparent",
+                  color: active ? "var(--accent-text)" : "var(--ink-muted)",
                 }}
               >
-                {cat.name} ({cat.published_count ?? 0})
+                {cat.name}{" "}
+                <span className="font-mono text-[11px] opacity-75">({cat.published_count ?? 0})</span>
               </button>
             );
           })}
@@ -308,7 +301,7 @@ export function GalleryPage() {
       {/* Catalog content */}
       <section aria-label="Daftar skill" className="mt-6">
         {loading && (
-          <div role="status" className="reneo-card p-10 text-center text-sm" style={{ color: "var(--ink-muted)" }}>
+          <div role="status" className="py-12 text-center text-sm" style={{ color: "var(--ink-muted)" }}>
             Memuat katalog skill...
           </div>
         )}
@@ -316,7 +309,7 @@ export function GalleryPage() {
         {!loading && error && (
           <div
             role="alert"
-            className="rounded-[14px] border p-6"
+            className="rounded-xl border p-5"
             style={{
               backgroundColor: "var(--danger-bg)",
               borderColor: "var(--danger)",
@@ -328,12 +321,8 @@ export function GalleryPage() {
             <button
               type="button"
               onClick={() => void loadData()}
-              className="mt-4 min-h-[38px] rounded-[10px] border px-4 text-xs font-semibold"
-              style={{
-                backgroundColor: "var(--surface-elevated)",
-                borderColor: "var(--danger)",
-                color: "var(--danger-text)",
-              }}
+              className="reneo-btn-ghost mt-3 inline-flex h-8 items-center px-3 text-xs font-semibold"
+              style={{ borderColor: "var(--danger)", color: "var(--danger-text)" }}
             >
               Muat ulang daftar
             </button>
@@ -341,11 +330,11 @@ export function GalleryPage() {
         )}
 
         {!loading && !error && skills.length === 0 && (
-          <div className="reneo-card p-10 text-center">
-            <h2 className="text-base font-bold" style={{ color: "var(--ink)" }}>
+          <div className="rounded-xl border border-dashed p-10 text-center" style={{ borderColor: "var(--border)" }}>
+            <h2 className="text-base font-semibold" style={{ color: "var(--ink)" }}>
               {hasFilters ? "Tidak ada skill yang cocok dengan filter" : "Belum ada skill yang dipublikasikan"}
             </h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--ink-muted)" }}>
+            <p className="mt-1.5 text-sm" style={{ color: "var(--ink-muted)" }}>
               {hasFilters
                 ? "Ubah kata kunci pencarian atau hapus filter kategori dan agent untuk melihat seluruh katalog."
                 : "Masuk ke Panel Admin untuk menambahkan dan mempublikasikan skill pertama."}
@@ -354,7 +343,7 @@ export function GalleryPage() {
               <button
                 type="button"
                 onClick={resetFilters}
-                className="reneo-btn-primary mt-4 min-h-[40px] px-4 text-sm"
+                className="reneo-btn-primary mt-4 inline-flex h-9 items-center px-4 text-xs"
               >
                 Reset semua filter
               </button>
@@ -370,7 +359,7 @@ export function GalleryPage() {
               ))}
             </div>
           ) : (
-            <div className="space-y-2.5">
+            <div className="divide-y rounded-xl border" style={{ borderColor: "var(--border)", backgroundColor: "var(--surface-elevated)" }}>
               {skills.map((skill) => (
                 <SkillCard key={skill.id} skill={skill} layout="list" />
               ))}

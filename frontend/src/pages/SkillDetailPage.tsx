@@ -112,52 +112,44 @@ export function SkillDetailPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="space-y-5 lg:col-span-8">
-          <div className="reneo-card p-6">
-            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
-              <span
-                className="rounded-full px-2.5 py-0.5 font-semibold"
-                style={{
-                  backgroundColor: "var(--accent-tint)",
-                  color: "var(--accent-text)",
-                }}
-              >
+          <div className="border-b pb-5" style={{ borderColor: "var(--border)" }}>
+            <div className="mb-2.5 flex flex-wrap items-center gap-2 text-xs">
+              <span className="font-semibold" style={{ color: "var(--accent-text)" }}>
                 {skill.category_name || "Umum"}
               </span>
-              <span
-                className="rounded-full px-2.5 py-0.5 font-mono font-medium"
-                style={{ backgroundColor: "var(--surface)", color: "var(--ink-muted)" }}
-              >
+              <span style={{ color: "var(--ink-muted)" }} aria-hidden="true">·</span>
+              <span className="font-mono font-medium" style={{ color: "var(--ink-muted)" }}>
                 v{skill.version}
               </span>
+              <span style={{ color: "var(--ink-muted)" }} aria-hidden="true">·</span>
               <span style={{ color: "var(--ink-muted)" }}>Oleh {skill.author}</span>
             </div>
 
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: "var(--ink)" }}>
               {skill.name}
             </h1>
-            <p className="mt-2.5 text-[15px] leading-relaxed" style={{ color: "var(--ink-body)" }}>
+            <p className="mt-2 text-sm leading-relaxed sm:text-[15px]" style={{ color: "var(--ink-body)" }}>
               {skill.summary}
             </p>
           </div>
 
           <div
-            className="inline-flex flex-wrap gap-1 rounded-[12px] border p-1"
+            className="flex flex-wrap gap-1 border-b pb-2"
             role="tablist"
-            style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
+            style={{ borderColor: "var(--border)" }}
           >
             <button
               type="button"
               role="tab"
               aria-selected={activeTab === "preview"}
               onClick={() => setActiveTab("preview")}
-              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "preview" ? "var(--surface-elevated)" : "transparent",
-                color: activeTab === "preview" ? "var(--accent-text)" : "var(--ink-body)",
-                boxShadow: activeTab === "preview" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+                backgroundColor: activeTab === "preview" ? "var(--accent-tint)" : "transparent",
+                color: activeTab === "preview" ? "var(--accent-text)" : "var(--ink-muted)",
               }}
             >
-              <FileText size={14} strokeWidth={1.75} aria-hidden="true" />
+              <FileText size={13} strokeWidth={1.75} aria-hidden="true" />
               Pratinjau SKILL.md
             </button>
             <button
@@ -165,14 +157,13 @@ export function SkillDetailPage() {
               role="tab"
               aria-selected={activeTab === "raw"}
               onClick={() => setActiveTab("raw")}
-              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "raw" ? "var(--surface-elevated)" : "transparent",
-                color: activeTab === "raw" ? "var(--accent-text)" : "var(--ink-body)",
-                boxShadow: activeTab === "raw" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+                backgroundColor: activeTab === "raw" ? "var(--accent-tint)" : "transparent",
+                color: activeTab === "raw" ? "var(--accent-text)" : "var(--ink-muted)",
               }}
             >
-              <Code2 size={14} strokeWidth={1.75} aria-hidden="true" />
+              <Code2 size={13} strokeWidth={1.75} aria-hidden="true" />
               Markdown Mentah
             </button>
             <button
@@ -180,14 +171,13 @@ export function SkillDetailPage() {
               role="tab"
               aria-selected={activeTab === "files"}
               onClick={() => setActiveTab("files")}
-              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "files" ? "var(--surface-elevated)" : "transparent",
-                color: activeTab === "files" ? "var(--accent-text)" : "var(--ink-body)",
-                boxShadow: activeTab === "files" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+                backgroundColor: activeTab === "files" ? "var(--accent-tint)" : "transparent",
+                color: activeTab === "files" ? "var(--accent-text)" : "var(--ink-muted)",
               }}
             >
-              <FileCode2 size={14} strokeWidth={1.75} aria-hidden="true" />
+              <FileCode2 size={13} strokeWidth={1.75} aria-hidden="true" />
               File Pendukung ({files.length})
             </button>
           </div>
@@ -198,7 +188,7 @@ export function SkillDetailPage() {
 
           {activeTab === "raw" && (
             <div
-              className="overflow-hidden rounded-[14px] border"
+              className="overflow-hidden rounded-xl border"
               style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
             >
               <div
@@ -209,13 +199,13 @@ export function SkillDetailPage() {
                 <button
                   type="button"
                   onClick={() => void copyText("raw", skill.skill_markdown || "")}
-                  className="inline-flex items-center gap-1 rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                  className="inline-flex h-7 items-center gap-1 rounded-md border border-slate-700 bg-slate-800 px-2.5 text-xs font-medium text-slate-200 hover:bg-slate-700"
                 >
-                  {copiedKey === "raw" ? <Check size={13} strokeWidth={2} aria-hidden="true" /> : <Copy size={13} strokeWidth={1.75} aria-hidden="true" />}
+                  {copiedKey === "raw" ? <Check size={12} strokeWidth={2} aria-hidden="true" /> : <Copy size={12} strokeWidth={1.75} aria-hidden="true" />}
                   {copiedKey === "raw" ? "Tersalin" : "Salin"}
                 </button>
               </div>
-              <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
+              <pre className="reneo-code-scroll overflow-x-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
                 <code>{skill.skill_markdown}</code>
               </pre>
             </div>
@@ -274,7 +264,7 @@ export function SkillDetailPage() {
                             mengambil file ini.
                           </p>
                         ) : (
-                          <pre className="max-h-[420px] overflow-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
+                          <pre className="reneo-code-scroll max-h-[420px] overflow-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
                             <code>{selectedFile.content}</code>
                           </pre>
                         )}
@@ -331,7 +321,7 @@ export function SkillDetailPage() {
                   </button>
                 </div>
                 <pre
-                  className="overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
+                  className="reneo-code-scroll overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
                   style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
                 >
                   <code>{psCommand}</code>
@@ -354,7 +344,7 @@ export function SkillDetailPage() {
                   </button>
                 </div>
                 <pre
-                  className="overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
+                  className="reneo-code-scroll overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
                   style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
                 >
                   <code>{bashCommand}</code>

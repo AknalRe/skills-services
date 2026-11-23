@@ -3,6 +3,7 @@ import path from "path";
 import { DatabaseSync } from "node:sqlite";
 import { config } from "./config";
 import { hashPassword } from "./auth";
+import { BUILTIN_SKILLS } from "./seedSkills";
 
 let dbInstance: DatabaseSync | null = null;
 
@@ -104,88 +105,27 @@ function seedInitialData(db: DatabaseSync): void {
     }
   }
 
-  const skillCount = db.prepare("SELECT COUNT(*) as c FROM skills").get() as { c: number };
-  if (skillCount.c === 0) {
-    const bizCat = db.prepare("SELECT id FROM categories WHERE slug = ?").get("bisnis-penawaran") as { id: number } | undefined;
-    const uiCat = db.prepare("SELECT id FROM categories WHERE slug = ?").get("desain-ui") as { id: number } | undefined;
+  const getCatId = db.prepare("SELECT id FROM categories WHERE slug = ?");
+  const insertSkill = db.prepare(`
+    INSERT OR IGNORE INTO skills (
+      slug, name, summary, category_id, version, author,
+      tags, compatible_agents, skill_markdown, status, featured
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', ?)
+  `);
 
-    const starterSkills = [
-      {
-        slug: "reneo-penawaran",
-        name: "Reneo Penawaran",
-        summary: "Alur kerja penyusunan penawaran layanan PDF A4, batasan kerja, arsitektur SaaS pendamping, dan pesan WhatsApp pengantar untuk calon klien Reneo.",
-        categoryId: bizCat?.id ?? null,
-        version: "1.0.0",
-        author: "Renaldi, Reneo",
-        tags: JSON.stringify(["penawaran", "pdf", "invoice", "bisnis", "whatsapp"]),
-        agents: JSON.stringify(["Antigravity", "Claude Code", "Codex", "Cursor"]),
-        featured: 1,
-        markdown: `---
-name: reneo-penawaran
-description: Panduan dan alur kerja pembuatan dokumen penawaran layanan PDF A4, draft invoice, catatan arsitektur SaaS pendamping, dan pesan WhatsApp pengantar untuk calon klien Reneo.
----
-
-# Reneo Penawaran
-
-Skill ini membakukan cara menyusun penawaran layanan digital Reneo dari percakapan klien hingga menghasilkan PDF A4 siap kirim.
-
-## Aturan Utama
-
-1. Jalankan bersama skill \`antislop\` dan \`antislop-copywriting\`.
-2. Gunakan domain utama \`reneo.my.id\` pada header, footer, dan blok kontak, serta subdomain produk (\`crm.reneo.my.id\`, \`sidesa.reneo.my.id\`) pada baris layanan tambahan.
-3. Susun dalam 3 halaman A4: cakupan fungsi, pilihan paket dan alur pembayaran, serta ketentuan dan batasan pengerjaan (revisi, materi, di luar cakupan, garansi, dan DP).
-4. Render PDF menggunakan Python \`reportlab\` tanpa membuka Chrome, lalu periksa visual setiap halaman sebelum dikirim.
-`,
-      },
-      {
-        slug: "anti-slop-reneo",
-        name: "Anti-Slop Reneo",
-        summary: "Filter desain, copywriting, dan kode untuk antarmuka Reneo agar bebas dekorasi AI generik, menjaga kontras WCAG AA, dan memakai token warna konsisten.",
-        categoryId: uiCat?.id ?? null,
-        version: "1.2.0",
-        author: "Tim Reneo",
-        tags: JSON.stringify(["ui", "copywriting", "aksesibilitas", "design-system"]),
-        agents: JSON.stringify(["Antigravity", "Claude Code", "Codex", "Cline", "Cursor"]),
-        featured: 1,
-        markdown: `---
-name: anti-slop-reneo
-description: Filter UI, copy, dan kode untuk mencegah pola AI slop pada produk Reneo.
----
-
-# Anti-Slop Reneo
-
-Setiap keputusan visual dan teks wajib memiliki alasan yang jelas.
-
-## Prinsip Inti
-
-- Bebas bulatan traffic light ala macOS pada window maupun mockup.
-- Bebas em dash dan buzzword marketing kosong pada copy antarmuka.
-- Setiap kontrol interaktif wajib memakai elemen semantik native dengan status hover, fokus keyboard, loading, empty, dan error.
-- Seluruh warna bersumber dari token CSS untuk mode terang dan gelap dengan kontras minimum WCAG AA.
-`,
-      },
-    ];
-
-    const insertSkill = db.prepare(`
-      INSERT INTO skills (
-        slug, name, summary, category_id, version, author,
-        tags, compatible_agents, skill_markdown, status, featured
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', ?)
-    `);
-
-    for (const s of starterSkills) {
-      insertSkill.run(
-        s.slug,
-        s.name,
-        s.summary,
-        s.categoryId,
-        s.version,
-        s.author,
-        s.tags,
-        s.agents,
-        s.markdown,
-        s.featured
-      );
-    }
+  for (const s of BUILTIN_SKILLS) {
+    const cat = getCatId.get(s.categorySlug) as { id: number } | undefined;
+    insertSkill.run(
+      s.slug,
+      s.name,
+      s.summary,
+      cat?.id ?? null,
+      s.version,
+      s.author,
+      JSON.stringify(s.tags),
+      JSON.stringify(s.agents),
+      s.markdown,
+      s.featured
+    );
   }
 }

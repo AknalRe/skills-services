@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f4f7fb;
-  --surface: rgba(15, 23, 42, 0.032);
-  --surface-strong: rgba(15, 23, 42, 0.055);
+  color-scheme: light;
+  --bg: #f6f8fb;
+  --surface: rgba(15, 23, 42, 0.035);
+  --surface-strong: rgba(15, 23, 42, 0.07);
   --surface-elevated: #ffffff;
-  --header-bg: rgba(255, 255, 255, 0.88);
+  --header-bg: rgba(255, 255, 255, 0.9);
   --border: rgba(203, 213, 225, 0.85);
   --border-strong: #94a3b8;
   --ink: #0f172a;
@@ -18,63 +19,101 @@
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
   --accent-text: #1d4ed8;
-  --accent-tint: rgba(37, 99, 235, 0.1);
+  --accent-tint: rgba(37, 99, 235, 0.09);
+  --accent-tint-hover: rgba(37, 99, 235, 0.16);
   --accent-border: rgba(37, 99, 235, 0.28);
   --emerald: #059669;
-  --emerald-bg: rgba(5, 150, 105, 0.12);
+  --emerald-bg: rgba(5, 150, 105, 0.11);
   --emerald-text: #047857;
   --warning-bg: rgba(217, 119, 6, 0.12);
   --warning-text: #b45309;
   --danger: #dc2626;
   --danger-bg: rgba(220, 38, 38, 0.1);
   --danger-text: #b91c1c;
-  --field-bg: rgba(15, 23, 42, 0.03);
-  --code-bg: #0f172a;
-  --code-border: #1e293b;
+  --field-bg: #ffffff;
+  --code-bg: #0c1322;
+  --code-border: rgba(148, 163, 184, 0.16);
   --code-text: #e2e8f0;
-  --card-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
-  --card-shadow-hover: 0 12px 28px -6px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  --scrollbar-thumb: rgba(100, 116, 139, 0.35);
+  --scrollbar-thumb-hover: rgba(100, 116, 139, 0.58);
+  --code-scrollbar-thumb: rgba(148, 163, 184, 0.26);
+  --code-scrollbar-thumb-hover: rgba(148, 163, 184, 0.48);
+  --card-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --card-shadow-hover: 0 6px 18px -4px rgba(15, 23, 42, 0.08);
   --modal-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
-  --primary-shadow: 0 6px 14px rgba(37, 99, 235, 0.22);
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #090f1d;
-  --surface: rgba(148, 163, 184, 0.08);
+  --surface: rgba(148, 163, 184, 0.07);
   --surface-strong: rgba(148, 163, 184, 0.14);
-  --surface-elevated: #111a2e;
-  --header-bg: rgba(11, 17, 32, 0.86);
-  --border: rgba(148, 163, 184, 0.18);
-  --border-strong: rgba(148, 163, 184, 0.35);
+  --surface-elevated: #0f172a;
+  --header-bg: rgba(9, 15, 29, 0.88);
+  --border: rgba(148, 163, 184, 0.16);
+  --border-strong: rgba(148, 163, 184, 0.32);
   --ink: #f8fafc;
   --ink-body: #cbd5e1;
   --ink-muted: #94a3b8;
   --brand: #1d3d73;
   --brand-ink: #f8fafc;
   --accent: #3b82f6;
-  --accent-hover: #60a5fa;
+  --accent-hover: #2563eb;
   --accent-text: #93c5fd;
-  --accent-tint: rgba(59, 130, 246, 0.16);
-  --accent-border: rgba(96, 165, 250, 0.35);
+  --accent-tint: rgba(59, 130, 246, 0.14);
+  --accent-tint-hover: rgba(59, 130, 246, 0.22);
+  --accent-border: rgba(96, 165, 250, 0.34);
   --emerald: #10b981;
-  --emerald-bg: rgba(16, 185, 129, 0.16);
+  --emerald-bg: rgba(16, 185, 129, 0.14);
   --emerald-text: #34d399;
-  --warning-bg: rgba(245, 158, 11, 0.16);
+  --warning-bg: rgba(245, 158, 11, 0.15);
   --warning-text: #fbbf24;
   --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.16);
+  --danger-bg: rgba(239, 68, 68, 0.14);
   --danger-text: #f87171;
-  --field-bg: rgba(15, 23, 42, 0.55);
-  --code-bg: #060b16;
-  --code-border: rgba(148, 163, 184, 0.18);
+  --field-bg: rgba(15, 23, 42, 0.72);
+  --code-bg: #070c17;
+  --code-border: rgba(148, 163, 184, 0.16);
   --code-text: #e2e8f0;
-  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
-  --card-shadow-hover: 0 14px 32px rgba(0, 0, 0, 0.42);
+  --scrollbar-thumb: rgba(148, 163, 184, 0.24);
+  --scrollbar-thumb-hover: rgba(148, 163, 184, 0.44);
+  --code-scrollbar-thumb: rgba(148, 163, 184, 0.24);
+  --code-scrollbar-thumb-hover: rgba(148, 163, 184, 0.45);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --card-shadow-hover: 0 8px 22px -4px rgba(0, 0, 0, 0.4);
   --modal-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
-  --primary-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
 }
 
 @layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   html {
     background-color: var(--bg);
     color: var(--ink);
@@ -103,7 +142,7 @@
   select:disabled,
   input:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.55;
   }
 
   :focus-visible {
@@ -122,12 +161,37 @@
   }
 }
 
+/* Custom thin dark scrollbar for code blocks */
+.reneo-code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--code-scrollbar-thumb) transparent;
+}
+
+.reneo-code-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.reneo-code-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reneo-code-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--code-scrollbar-thumb);
+  border-radius: 9999px;
+}
+
+.reneo-code-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--code-scrollbar-thumb-hover);
+}
+
+/* Surface & card primitives */
 .reneo-card {
   background-color: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: var(--card-shadow);
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
 }
 
 .reneo-card--interactive:hover {
@@ -135,12 +199,13 @@
   box-shadow: var(--card-shadow-hover);
 }
 
+/* Button primitives */
 .reneo-btn-primary {
   background-color: var(--accent);
   color: #ffffff;
-  border-radius: 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font-weight: 600;
-  box-shadow: var(--primary-shadow);
   transition: background-color 140ms ease;
 }
 
@@ -148,26 +213,45 @@
   background-color: var(--accent-hover);
 }
 
+.reneo-btn-secondary {
+  background-color: var(--accent-tint);
+  color: var(--accent-text);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.reneo-btn-secondary:hover:not(:disabled) {
+  background-color: var(--accent-tint-hover);
+}
+
 .reneo-btn-ghost {
-  background-color: var(--surface-elevated);
+  background-color: transparent;
   color: var(--ink-body);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 500;
-  transition: background-color 140ms ease, border-color 140ms ease;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
 .reneo-btn-ghost:hover:not(:disabled) {
   background-color: var(--surface-strong);
   border-color: var(--border-strong);
+  color: var(--ink);
 }
 
+/* Form fields & styled select */
 .reneo-field {
   background-color: var(--field-bg);
   color: var(--ink);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.reneo-field:hover:not(:disabled) {
+  border-color: var(--border-strong);
 }
 
 .reneo-field:focus {
@@ -176,14 +260,24 @@
   outline: none;
 }
 
+.reneo-select {
+  appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 14px 14px;
+}
+
 .status-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 9999px;
   display: inline-block;
   flex-shrink: 0;
 }
 
+/* Markdown prose */
 .md-prose h1 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -194,7 +288,7 @@
 }
 
 .md-prose h2 {
-  font-size: 1.15rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--ink);
   margin: 1.5rem 0 0.6rem;
@@ -243,7 +337,7 @@
   background-color: var(--surface-strong);
   color: var(--ink);
   padding: 0.14rem 0.4rem;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 
 .md-prose pre {
@@ -253,6 +347,8 @@
   padding: 0.95rem 1.1rem;
   overflow-x: auto;
   margin: 0.9rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--code-scrollbar-thumb) transparent;
 }
 
 .md-prose pre code {
