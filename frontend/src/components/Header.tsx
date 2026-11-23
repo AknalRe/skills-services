@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { withBasePath } from "../lib/basePath";
 import type { User } from "../types";
 
 interface HeaderProps {
@@ -40,7 +41,7 @@ export function Header({ theme, onToggleTheme, user, onLogout }: HeaderProps) {
       <div className="h-1 w-full" style={{ backgroundColor: "var(--brand)" }} aria-hidden="true" />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex items-center gap-3 no-underline">
-          <img src="/favicon.svg" alt="Reneo" width={34} height={34} className="rounded-md" />
+          <img src={withBasePath("/logo.svg")} alt="Reneo Skills" width={34} height={34} className="rounded-md" />
           <div className="flex flex-col">
             <span className="text-base font-bold tracking-tight" style={{ color: "var(--ink)" }}>
               Reneo Skills

@@ -1,7 +1,8 @@
 import type { AdminSummary, Category, PublicStats, Skill, SkillFile, User } from "../types";
+import { withBasePath } from "./basePath";
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
+  const res = await fetch(withBasePath(url), {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

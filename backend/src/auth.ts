@@ -61,13 +61,15 @@ export function verifySession(token: string | undefined): SessionUser | null {
   }
 }
 
-export function setSessionCookie(reply: FastifyReply, user: SessionUser): void {
+export function setSessionCookie(request: FastifyRequest, reply: FastifyReply, user: SessionUser): void {
   const token = signSession(user);
+  const forwardedProto = String(request.headers["x-forwarded-proto"] || "").toLowerCase();
+  const isHttps = request.protocol === "https" || forwardedProto.includes("https");
   reply.setCookie(SESSION_COOKIE_NAME, token, {
     path: "/",
     httpOnly: true,
     sameSite: "lax",
-    secure: config.nodeEnv === "production",
+    secure: isHttps,
     maxAge: SESSION_TTL_SECONDS,
   });
 }

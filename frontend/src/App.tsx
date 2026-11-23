@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { api } from "./lib/api";
+import { getAppBasePath } from "./lib/basePath";
 import type { User } from "./types";
 import { Header } from "./components/Header";
 import { GalleryPage } from "./pages/GalleryPage";
@@ -37,8 +38,10 @@ export function App() {
     }
   };
 
+  const basePath = getAppBasePath();
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basePath || undefined}>
       <div className="flex min-h-screen flex-col">
         <Header
           theme={theme}

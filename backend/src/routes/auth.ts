@@ -25,7 +25,7 @@ export function registerAuthRoutes(app: FastifyInstance, db: DatabaseSync): void
     }
 
     const user = { id: row.id, email: row.email, name: row.name, role: row.role };
-    setSessionCookie(reply, user);
+    setSessionCookie(request, reply, user);
     return { user };
   });
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
+import { withBasePath } from "../lib/basePath";
 import { renderMarkdownToHtml } from "../lib/markdown";
 import type { Skill, SkillFile } from "../types";
 
@@ -39,8 +40,8 @@ export function SkillDetailPage() {
   }, [skill?.skill_markdown]);
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const zipUrl = skill ? `${origin}/api/skills/${skill.slug}/download` : "";
-  const rawUrl = skill ? `${origin}/api/skills/${skill.slug}/raw` : "";
+  const zipUrl = skill ? `${origin}${withBasePath(`/api/skills/${skill.slug}/download`)}` : "";
+  const rawUrl = skill ? `${origin}${withBasePath(`/api/skills/${skill.slug}/raw`)}` : "";
 
   const psCommand = skill
     ? `$d="$env:USERPROFILE\\.gemini\\config\\skills"; New-Item -ItemType Directory -Force $d | Out-Null; Invoke-WebRequest "${zipUrl}" -OutFile "$env:TEMP\\${skill.slug}.zip"; Expand-Archive "$env:TEMP\\${skill.slug}.zip" -DestinationPath $d -Force`
