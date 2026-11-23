@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { ExternalLink, FileCode2, FolderPlus, Pencil, Plus, Search, Trash2, Upload } from "lucide-react";
 import { api } from "../lib/api";
 import { renderMarkdownToHtml } from "../lib/markdown";
 import type { AdminSummary, Category, Skill, SkillFile } from "../types";
@@ -31,7 +32,8 @@ const EMPTY_FORM: SkillFormState = {
   author: "Renaldi, Reneo",
   tagsText: "",
   compatible_agents: ["Antigravity", "Claude Code", "Codex"],
-  skill_markdown: "---\nname: nama-skill\ndescription: Jelaskan kapan skill ini dipakai.\n---\n\n# Judul Skill\n\nTuliskan instruksi langkah kerja di sini.\n",
+  skill_markdown:
+    "---\nname: nama-skill\ndescription: Jelaskan kapan skill ini dipakai.\n---\n\n# Judul Skill\n\nTuliskan instruksi langkah kerja di sini.\n",
   status: "published",
   featured: false,
 };
@@ -61,18 +63,15 @@ export function AdminDashboardPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-  // Skill editor modal state
   const [editorOpen, setEditorOpen] = useState(false);
   const [form, setForm] = useState<SkillFormState>(EMPTY_FORM);
   const [editorTab, setEditorTab] = useState<"write" | "preview">("write");
   const [savingSkill, setSavingSkill] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  // Delete confirmation modal
   const [deleteTarget, setDeleteTarget] = useState<Skill | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  // Supporting files modal state
   const [filesSkill, setFilesSkill] = useState<Skill | null>(null);
   const [skillFiles, setSkillFiles] = useState<SkillFile[]>([]);
   const [filesLoading, setFilesLoading] = useState(false);
@@ -83,7 +82,6 @@ export function AdminDashboardPage() {
   const [fileError, setFileError] = useState<string | null>(null);
   const [savingFile, setSavingFile] = useState(false);
 
-  // Category form state
   const [catName, setCatName] = useState("");
   const [catDesc, setCatDesc] = useState("");
   const [catError, setCatError] = useState<string | null>(null);
@@ -256,7 +254,8 @@ export function AdminDashboardPage() {
   const handleUploadLocalSupportFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const isText = file.type.startsWith("text/") || /\.(md|py|sh|ts|tsx|js|json|yaml|yml|css|scss|txt)$/i.test(file.name);
+    const isText =
+      file.type.startsWith("text/") || /\.(md|py|sh|ts|tsx|js|json|yaml|yml|css|scss|txt)$/i.test(file.name);
     const defaultFolder = file.type.startsWith("image/") ? "assets" : "scripts";
     setNewFilePath(`${defaultFolder}/${file.name}`);
     setNewFileMime(file.type || (isText ? "text/plain" : "application/octet-stream"));
@@ -350,8 +349,8 @@ export function AdminDashboardPage() {
   const editorPreviewHtml = useMemo(() => renderMarkdownToHtml(form.skill_markdown), [form.skill_markdown]);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <div className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between" style={{ borderColor: "var(--border)" }}>
+    <main className="mx-auto max-w-6xl px-4 py-7 sm:px-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--ink)" }}>
             Manajemen Skill
@@ -362,66 +361,93 @@ export function AdminDashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setSection("skills")}
-            className="min-h-[42px] rounded-md border px-3.5 text-sm font-semibold"
-            style={{
-              backgroundColor: section === "skills" ? "var(--surface)" : "transparent",
-              borderColor: section === "skills" ? "var(--brand)" : "var(--border)",
-              color: "var(--ink)",
-            }}
+          <div
+            className="inline-flex rounded-[12px] border p-1"
+            style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
           >
-            Daftar Skill ({summary?.total ?? 0})
-          </button>
-          <button
-            type="button"
-            onClick={() => setSection("categories")}
-            className="min-h-[42px] rounded-md border px-3.5 text-sm font-semibold"
-            style={{
-              backgroundColor: section === "categories" ? "var(--surface)" : "transparent",
-              borderColor: section === "categories" ? "var(--brand)" : "var(--border)",
-              color: "var(--ink)",
-            }}
-          >
-            Kategori ({categories.length})
-          </button>
+            <button
+              type="button"
+              onClick={() => setSection("skills")}
+              className="min-h-[34px] rounded-[9px] px-3 text-xs font-semibold transition-colors"
+              style={{
+                backgroundColor: section === "skills" ? "var(--surface-elevated)" : "transparent",
+                color: section === "skills" ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: section === "skills" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+              }}
+            >
+              Daftar Skill ({summary?.total ?? 0})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSection("categories")}
+              className="min-h-[34px] rounded-[9px] px-3 text-xs font-semibold transition-colors"
+              style={{
+                backgroundColor: section === "categories" ? "var(--surface-elevated)" : "transparent",
+                color: section === "categories" ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: section === "categories" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+              }}
+            >
+              Kategori ({categories.length})
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={openCreateModal}
-            className="min-h-[42px] rounded-md px-4 text-sm font-semibold"
-            style={{
-              backgroundColor: "var(--accent)",
-              color: "#ffffff",
-            }}
+            className="reneo-btn-primary inline-flex min-h-[40px] items-center gap-1.5 px-4 text-xs"
           >
+            <Plus size={15} strokeWidth={2} aria-hidden="true" />
             Tambah Skill Baru
           </button>
         </div>
       </div>
 
       {summary && section === "skills" && (
-        <div className="mt-5 flex flex-wrap gap-6 text-sm" style={{ color: "var(--ink-body)" }}>
-          <span>
-            Terbit: <strong className="font-mono" style={{ color: "var(--ink)" }}>{summary.published}</strong>
-          </span>
-          <span>
-            Draf: <strong className="font-mono" style={{ color: "var(--ink)" }}>{summary.draft}</strong>
-          </span>
-          <span>
-            Total unduhan: <strong className="font-mono" style={{ color: "var(--ink)" }}>{summary.downloads}</strong>
-          </span>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="reneo-card px-4 py-3">
+            <div className="text-[11px] font-medium" style={{ color: "var(--ink-muted)" }}>
+              Total skill
+            </div>
+            <div className="mt-1 font-mono text-xl font-bold" style={{ color: "var(--ink)" }}>
+              {summary.total}
+            </div>
+          </div>
+          <div className="reneo-card px-4 py-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: "var(--ink-muted)" }}>
+              <span className="status-dot" style={{ backgroundColor: "var(--emerald)" }} aria-hidden="true" />
+              Terbit
+            </div>
+            <div className="mt-1 font-mono text-xl font-bold" style={{ color: "var(--emerald-text)" }}>
+              {summary.published}
+            </div>
+          </div>
+          <div className="reneo-card px-4 py-3">
+            <div className="text-[11px] font-medium" style={{ color: "var(--ink-muted)" }}>
+              Draf
+            </div>
+            <div className="mt-1 font-mono text-xl font-bold" style={{ color: "var(--warning-text)" }}>
+              {summary.draft}
+            </div>
+          </div>
+          <div className="reneo-card px-4 py-3">
+            <div className="text-[11px] font-medium" style={{ color: "var(--ink-muted)" }}>
+              Total unduhan
+            </div>
+            <div className="mt-1 font-mono text-xl font-bold" style={{ color: "var(--ink)" }}>
+              {summary.downloads}
+            </div>
+          </div>
         </div>
       )}
 
       {error && (
         <div
           role="alert"
-          className="mt-5 rounded-md border px-4 py-3 text-sm"
+          className="mt-5 rounded-[12px] border px-4 py-3 text-sm"
           style={{
             backgroundColor: "var(--danger-bg)",
             borderColor: "var(--danger)",
-            color: "var(--danger)",
+            color: "var(--danger-text)",
           }}
         >
           {error}
@@ -429,25 +455,29 @@ export function AdminDashboardPage() {
       )}
 
       {section === "skills" && (
-        <section className="mt-5">
-          <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-12">
+        <section className="mt-5 space-y-4">
+          <div className="reneo-card grid grid-cols-1 gap-3 p-4 sm:grid-cols-12">
             <div className="sm:col-span-8">
               <label htmlFor="admin-skill-search" className="mb-1 block text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
                 Cari di katalog admin
               </label>
-              <input
-                id="admin-skill-search"
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari nama, slug, atau tag..."
-                className="min-h-[42px] w-full rounded-md border px-3 text-sm"
-                style={{
-                  backgroundColor: "var(--surface-elevated)",
-                  borderColor: "var(--border)",
-                  color: "var(--ink)",
-                }}
-              />
+              <div className="relative">
+                <Search
+                  size={15}
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
+                  style={{ color: "var(--ink-muted)" }}
+                />
+                <input
+                  id="admin-skill-search"
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Cari nama, slug, atau tag..."
+                  className="reneo-field min-h-[40px] w-full pl-9 pr-3 text-sm"
+                />
+              </div>
             </div>
             <div className="sm:col-span-4">
               <label htmlFor="admin-status-filter" className="mb-1 block text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
@@ -457,12 +487,7 @@ export function AdminDashboardPage() {
                 id="admin-status-filter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="min-h-[42px] w-full rounded-md border px-3 text-sm"
-                style={{
-                  backgroundColor: "var(--surface-elevated)",
-                  borderColor: "var(--border)",
-                  color: "var(--ink)",
-                }}
+                className="reneo-field min-h-[40px] w-full px-3 text-sm"
               >
                 <option value="">Semua status</option>
                 <option value="published">Terbit</option>
@@ -472,139 +497,129 @@ export function AdminDashboardPage() {
           </div>
 
           {loading ? (
-            <div
-              role="status"
-              className="rounded-lg border p-8 text-center text-sm"
-              style={{
-                backgroundColor: "var(--surface)",
-                borderColor: "var(--border)",
-                color: "var(--ink-muted)",
-              }}
-            >
+            <div role="status" className="reneo-card p-8 text-center text-sm" style={{ color: "var(--ink-muted)" }}>
               Memuat data skill...
             </div>
           ) : skills.length === 0 ? (
-            <div
-              className="rounded-lg border p-8 text-center"
-              style={{
-                backgroundColor: "var(--surface)",
-                borderColor: "var(--border)",
-              }}
-            >
+            <div className="reneo-card p-8 text-center">
               <p className="text-sm font-semibold" style={{ color: "var(--ink)" }}>
                 Belum ada skill pada filter ini.
               </p>
               <button
                 type="button"
                 onClick={openCreateModal}
-                className="mt-3 min-h-[40px] rounded-md px-4 text-sm font-semibold"
-                style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
+                className="reneo-btn-primary mt-3 inline-flex min-h-[40px] items-center gap-1.5 px-4 text-sm"
               >
+                <Plus size={15} strokeWidth={2} aria-hidden="true" />
                 Buat Skill Pertama
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--border)" }}>
-              <table className="w-full border-collapse text-left text-sm">
-                <thead>
-                  <tr style={{ backgroundColor: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
-                    <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-                      Skill &amp; Slug
-                    </th>
-                    <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-                      Kategori
-                    </th>
-                    <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-                      File / Unduhan
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {skills.map((skill) => (
-                    <tr
-                      key={skill.id}
-                      style={{
-                        borderBottom: "1px solid var(--border)",
-                        backgroundColor: "var(--surface-elevated)",
-                      }}
-                    >
-                      <td className="px-4 py-3 align-top">
-                        <div className="font-semibold" style={{ color: "var(--ink)" }}>
-                          {skill.name}{" "}
-                          <span className="font-mono text-xs font-normal" style={{ color: "var(--ink-muted)" }}>
-                            v{skill.version}
-                          </span>
-                        </div>
-                        <div className="font-mono text-xs" style={{ color: "var(--ink-muted)" }}>
-                          {skill.slug}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 align-top text-xs" style={{ color: "var(--ink-body)" }}>
-                        {skill.category_name || "Umum"}
-                      </td>
-                      <td className="px-4 py-3 align-top">
-                        <button
-                          type="button"
-                          onClick={() => void handleToggleStatus(skill)}
-                          className="rounded px-2.5 py-1 text-xs font-semibold"
-                          style={{
-                            backgroundColor: skill.status === "published" ? "var(--success-bg)" : "var(--warning-bg)",
-                            color: skill.status === "published" ? "var(--success)" : "var(--warning)",
-                          }}
-                        >
-                          {skill.status === "published" ? "Terbit" : "Draf"}
-                        </button>
-                      </td>
-                      <td className="px-4 py-3 align-top font-mono text-xs" style={{ color: "var(--ink-body)" }}>
-                        {skill.file_count} file / {skill.download_count} unduhan
-                      </td>
-                      <td className="px-4 py-3 align-top text-right">
-                        <div className="inline-flex flex-wrap justify-end gap-1.5">
-                          {skill.status === "published" && (
-                            <Link
-                              to={`/skills/${skill.slug}`}
-                              className="inline-flex min-h-[34px] items-center rounded border px-2.5 text-xs font-medium no-underline"
-                              style={{ borderColor: "var(--border)", color: "var(--ink-body)" }}
-                            >
-                              Lihat
-                            </Link>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => void openFilesModal(skill)}
-                            className="min-h-[34px] rounded border px-2.5 text-xs font-medium"
-                            style={{ borderColor: "var(--border)", color: "var(--ink-body)" }}
-                          >
-                            File ({skill.file_count})
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openEditModal(skill)}
-                            className="min-h-[34px] rounded border px-2.5 text-xs font-semibold"
-                            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setDeleteTarget(skill)}
-                            className="min-h-[34px] rounded border px-2.5 text-xs font-semibold"
-                            style={{ borderColor: "var(--border)", color: "var(--danger)" }}
-                          >
-                            Hapus
-                          </button>
-                        </div>
-                      </td>
+            <div className="reneo-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-left text-sm">
+                  <thead>
+                    <tr style={{ backgroundColor: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
+                      <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+                        Skill &amp; Slug
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+                        Kategori
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+                        File / Unduhan
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold" style={{ color: "var(--ink-muted)" }}>
+                        Aksi
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {skills.map((skill) => (
+                      <tr key={skill.id} style={{ borderBottom: "1px solid var(--border)" }}>
+                        <td className="px-4 py-3.5 align-middle">
+                          <div className="font-semibold" style={{ color: "var(--ink)" }}>
+                            {skill.name}{" "}
+                            <span className="font-mono text-xs font-normal" style={{ color: "var(--ink-muted)" }}>
+                              v{skill.version}
+                            </span>
+                          </div>
+                          <div className="font-mono text-xs" style={{ color: "var(--ink-muted)" }}>
+                            {skill.slug}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5 align-middle text-xs" style={{ color: "var(--ink-body)" }}>
+                          {skill.category_name || "Umum"}
+                        </td>
+                        <td className="px-4 py-3.5 align-middle">
+                          <button
+                            type="button"
+                            onClick={() => void handleToggleStatus(skill)}
+                            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                            style={{
+                              backgroundColor: skill.status === "published" ? "var(--emerald-bg)" : "var(--warning-bg)",
+                              color: skill.status === "published" ? "var(--emerald-text)" : "var(--warning-text)",
+                            }}
+                          >
+                            <span
+                              className="status-dot"
+                              style={{ backgroundColor: skill.status === "published" ? "var(--emerald)" : "var(--warning-text)" }}
+                              aria-hidden="true"
+                            />
+                            {skill.status === "published" ? "Terbit" : "Draf"}
+                          </button>
+                        </td>
+                        <td className="px-4 py-3.5 align-middle font-mono text-xs" style={{ color: "var(--ink-body)" }}>
+                          {skill.file_count} file / {skill.download_count} unduhan
+                        </td>
+                        <td className="px-4 py-3.5 align-middle text-right">
+                          <div className="inline-flex flex-wrap justify-end gap-1.5">
+                            {skill.status === "published" && (
+                              <Link
+                                to={`/skills/${skill.slug}`}
+                                className="reneo-btn-ghost inline-flex min-h-[32px] items-center gap-1 px-2.5 text-xs no-underline"
+                              >
+                                <ExternalLink size={12} strokeWidth={1.75} aria-hidden="true" />
+                                Lihat
+                              </Link>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => void openFilesModal(skill)}
+                              className="reneo-btn-ghost inline-flex min-h-[32px] items-center gap-1 px-2.5 text-xs"
+                            >
+                              <FileCode2 size={12} strokeWidth={1.75} aria-hidden="true" />
+                              File ({skill.file_count})
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => openEditModal(skill)}
+                              className="inline-flex min-h-[32px] items-center gap-1 rounded-[9px] px-2.5 text-xs font-semibold"
+                              style={{ backgroundColor: "var(--accent-tint)", color: "var(--accent-text)" }}
+                            >
+                              <Pencil size={12} strokeWidth={1.75} aria-hidden="true" />
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setDeleteTarget(skill)}
+                              aria-label={`Hapus ${skill.name}`}
+                              className="inline-flex min-h-[32px] items-center gap-1 rounded-[9px] px-2.5 text-xs font-semibold"
+                              style={{ backgroundColor: "var(--danger-bg)", color: "var(--danger-text)" }}
+                            >
+                              <Trash2 size={12} strokeWidth={1.75} aria-hidden="true" />
+                              Hapus
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </section>
@@ -612,24 +627,19 @@ export function AdminDashboardPage() {
 
       {section === "categories" && (
         <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <div
-            className="rounded-lg border p-5 lg:col-span-5"
-            style={{
-              backgroundColor: "var(--surface-elevated)",
-              borderColor: "var(--border)",
-            }}
-          >
-            <h2 className="text-base font-bold" style={{ color: "var(--ink)" }}>
+          <div className="reneo-card p-5 lg:col-span-5">
+            <h2 className="flex items-center gap-2 text-base font-bold" style={{ color: "var(--ink)" }}>
+              <FolderPlus size={16} strokeWidth={1.75} aria-hidden="true" />
               Tambah Kategori
             </h2>
             {catError && (
               <div
                 role="alert"
-                className="mt-3 rounded border px-3 py-2 text-xs"
+                className="mt-3 rounded-[10px] border px-3 py-2 text-xs"
                 style={{
                   backgroundColor: "var(--danger-bg)",
                   borderColor: "var(--danger)",
-                  color: "var(--danger)",
+                  color: "var(--danger-text)",
                 }}
               >
                 {catError}
@@ -646,8 +656,7 @@ export function AdminDashboardPage() {
                   value={catName}
                   onChange={(e) => setCatName(e.target.value)}
                   placeholder="Contoh: Integrasi API"
-                  className="min-h-[42px] w-full rounded-md border px-3 text-sm"
-                  style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                  className="reneo-field min-h-[40px] w-full px-3 text-sm"
                 />
               </div>
               <div>
@@ -660,16 +669,10 @@ export function AdminDashboardPage() {
                   value={catDesc}
                   onChange={(e) => setCatDesc(e.target.value)}
                   placeholder="Jelaskan jenis skill dalam kategori ini"
-                  className="w-full rounded-md border p-3 text-sm"
-                  style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                  className="reneo-field w-full p-3 text-sm"
                 />
               </div>
-              <button
-                type="submit"
-                disabled={savingCat}
-                className="min-h-[42px] rounded-md px-4 text-sm font-semibold"
-                style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
-              >
+              <button type="submit" disabled={savingCat} className="reneo-btn-primary min-h-[40px] px-4 text-sm">
                 {savingCat ? "Menyimpan..." : "Simpan Kategori"}
               </button>
             </form>
@@ -677,14 +680,7 @@ export function AdminDashboardPage() {
 
           <div className="space-y-2.5 lg:col-span-7">
             {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex items-start justify-between gap-4 rounded-lg border p-4"
-                style={{
-                  backgroundColor: "var(--surface-elevated)",
-                  borderColor: "var(--border)",
-                }}
-              >
+              <div key={cat.id} className="reneo-card flex items-start justify-between gap-4 p-4">
                 <div>
                   <div className="font-semibold" style={{ color: "var(--ink)" }}>
                     {cat.name}{" "}
@@ -704,9 +700,10 @@ export function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => void handleDeleteCategory(cat.id)}
-                  className="min-h-[36px] shrink-0 rounded border px-3 text-xs font-semibold"
-                  style={{ borderColor: "var(--border)", color: "var(--danger)" }}
+                  className="inline-flex min-h-[34px] shrink-0 items-center gap-1 rounded-[9px] px-3 text-xs font-semibold"
+                  style={{ backgroundColor: "var(--danger-bg)", color: "var(--danger-text)" }}
                 >
+                  <Trash2 size={12} strokeWidth={1.75} aria-hidden="true" />
                   Hapus
                 </button>
               </div>
@@ -726,11 +723,11 @@ export function AdminDashboardPage() {
           {formError && (
             <div
               role="alert"
-              className="rounded-md border px-3.5 py-2.5 text-sm"
+              className="rounded-[10px] border px-3.5 py-2.5 text-sm"
               style={{
                 backgroundColor: "var(--danger-bg)",
                 borderColor: "var(--danger)",
-                color: "var(--danger)",
+                color: "var(--danger-text)",
               }}
             >
               {formError}
@@ -738,7 +735,7 @@ export function AdminDashboardPage() {
           )}
 
           <div
-            className="flex flex-wrap items-center justify-between gap-2 rounded-md border px-3.5 py-2.5"
+            className="flex flex-wrap items-center justify-between gap-2 rounded-[12px] border px-3.5 py-2.5"
             style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
           >
             <span className="text-xs" style={{ color: "var(--ink-body)" }}>
@@ -746,9 +743,10 @@ export function AdminDashboardPage() {
             </span>
             <label
               htmlFor="import-skill-md"
-              className="inline-flex min-h-[34px] items-center rounded border px-3 text-xs font-semibold"
-              style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--accent)" }}
+              className="reneo-btn-ghost inline-flex min-h-[34px] items-center gap-1.5 px-3 text-xs font-semibold"
+              style={{ color: "var(--accent-text)" }}
             >
+              <Upload size={13} strokeWidth={1.75} aria-hidden="true" />
               Pilih file SKILL.md
               <input
                 id="import-skill-md"
@@ -772,8 +770,7 @@ export function AdminDashboardPage() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Contoh: Reneo Penawaran"
-                className="min-h-[40px] w-full rounded-md border px-3 text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-3 text-sm"
               />
             </div>
 
@@ -787,8 +784,7 @@ export function AdminDashboardPage() {
                 value={form.slug}
                 onChange={(e) => setForm({ ...form, slug: e.target.value })}
                 placeholder="reneo-penawaran (otomatis jika kosong)"
-                className="min-h-[40px] w-full rounded-md border px-3 font-mono text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-3 font-mono text-sm"
               />
             </div>
           </div>
@@ -804,8 +800,7 @@ export function AdminDashboardPage() {
               value={form.summary}
               onChange={(e) => setForm({ ...form, summary: e.target.value })}
               placeholder="Jelaskan kegunaan utama skill dalam 1 sampai 2 kalimat."
-              className="w-full rounded-md border p-3 text-sm"
-              style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+              className="reneo-field w-full p-3 text-sm"
             />
           </div>
 
@@ -818,8 +813,7 @@ export function AdminDashboardPage() {
                 id="f-cat"
                 value={form.category_id}
                 onChange={(e) => setForm({ ...form, category_id: e.target.value })}
-                className="min-h-[40px] w-full rounded-md border px-2.5 text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-2.5 text-sm"
               >
                 <option value="">Umum</option>
                 {categories.map((c) => (
@@ -839,8 +833,7 @@ export function AdminDashboardPage() {
                 type="text"
                 value={form.version}
                 onChange={(e) => setForm({ ...form, version: e.target.value })}
-                className="min-h-[40px] w-full rounded-md border px-3 font-mono text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-3 font-mono text-sm"
               />
             </div>
 
@@ -853,8 +846,7 @@ export function AdminDashboardPage() {
                 type="text"
                 value={form.author}
                 onChange={(e) => setForm({ ...form, author: e.target.value })}
-                className="min-h-[40px] w-full rounded-md border px-3 text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-3 text-sm"
               />
             </div>
 
@@ -866,8 +858,7 @@ export function AdminDashboardPage() {
                 id="f-status"
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value as "published" | "draft" })}
-                className="min-h-[40px] w-full rounded-md border px-2.5 text-sm"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-2.5 text-sm"
               >
                 <option value="published">Terbit (Publik)</option>
                 <option value="draft">Draf (Privat)</option>
@@ -886,8 +877,7 @@ export function AdminDashboardPage() {
                 value={form.tagsText}
                 onChange={(e) => setForm({ ...form, tagsText: e.target.value })}
                 placeholder="penawaran, pdf, bisnis"
-                className="min-h-[40px] w-full rounded-md border px-3 font-mono text-xs"
-                style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="reneo-field min-h-[40px] w-full px-3 font-mono text-xs"
               />
             </div>
 
@@ -913,11 +903,11 @@ export function AdminDashboardPage() {
                 return (
                   <label
                     key={agent}
-                    className="inline-flex items-center gap-1.5 rounded border px-2.5 py-1.5 text-xs"
+                    className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium"
                     style={{
                       backgroundColor: checked ? "var(--accent-tint)" : "var(--surface)",
-                      borderColor: checked ? "var(--accent)" : "var(--border)",
-                      color: checked ? "var(--accent)" : "var(--ink-body)",
+                      borderColor: checked ? "var(--accent-border)" : "var(--border)",
+                      color: checked ? "var(--accent-text)" : "var(--ink-body)",
                     }}
                   >
                     <input type="checkbox" checked={checked} onChange={() => toggleAgent(agent)} />
@@ -937,11 +927,11 @@ export function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setEditorTab("write")}
-                  className="rounded border px-2.5 py-1 text-xs font-semibold"
+                  className="rounded-lg border px-2.5 py-1 text-xs font-semibold"
                   style={{
                     backgroundColor: editorTab === "write" ? "var(--accent-tint)" : "transparent",
-                    borderColor: editorTab === "write" ? "var(--accent)" : "var(--border)",
-                    color: editorTab === "write" ? "var(--accent)" : "var(--ink-muted)",
+                    borderColor: editorTab === "write" ? "var(--accent-border)" : "var(--border)",
+                    color: editorTab === "write" ? "var(--accent-text)" : "var(--ink-muted)",
                   }}
                 >
                   Tulis
@@ -949,11 +939,11 @@ export function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setEditorTab("preview")}
-                  className="rounded border px-2.5 py-1 text-xs font-semibold"
+                  className="rounded-lg border px-2.5 py-1 text-xs font-semibold"
                   style={{
                     backgroundColor: editorTab === "preview" ? "var(--accent-tint)" : "transparent",
-                    borderColor: editorTab === "preview" ? "var(--accent)" : "var(--border)",
-                    color: editorTab === "preview" ? "var(--accent)" : "var(--ink-muted)",
+                    borderColor: editorTab === "preview" ? "var(--accent-border)" : "var(--border)",
+                    color: editorTab === "preview" ? "var(--accent-text)" : "var(--ink-muted)",
                   }}
                 >
                   Pratinjau
@@ -968,12 +958,12 @@ export function AdminDashboardPage() {
                 rows={12}
                 value={form.skill_markdown}
                 onChange={(e) => setForm({ ...form, skill_markdown: e.target.value })}
-                className="w-full rounded-md border p-3 font-mono text-xs leading-relaxed"
-                style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                className="w-full rounded-[12px] border p-3.5 font-mono text-xs leading-relaxed text-slate-200"
+                style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
               />
             ) : (
               <div
-                className="md-prose max-h-[300px] overflow-y-auto rounded-md border p-4"
+                className="md-prose max-h-[300px] overflow-y-auto rounded-[12px] border p-4"
                 style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
                 dangerouslySetInnerHTML={{ __html: editorPreviewHtml }}
               />
@@ -981,20 +971,10 @@ export function AdminDashboardPage() {
           </div>
 
           <div className="flex justify-end gap-2 border-t pt-4" style={{ borderColor: "var(--border)" }}>
-            <button
-              type="button"
-              onClick={() => setEditorOpen(false)}
-              className="min-h-[42px] rounded-md border px-4 text-sm font-medium"
-              style={{ borderColor: "var(--border)", color: "var(--ink-body)" }}
-            >
+            <button type="button" onClick={() => setEditorOpen(false)} className="reneo-btn-ghost min-h-[40px] px-4 text-sm">
               Batal
             </button>
-            <button
-              type="submit"
-              disabled={savingSkill}
-              className="min-h-[42px] rounded-md px-5 text-sm font-semibold"
-              style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
-            >
+            <button type="submit" disabled={savingSkill} className="reneo-btn-primary min-h-[40px] px-5 text-sm">
               {savingSkill ? "Menyimpan..." : form.id ? "Simpan Perubahan" : "Terbitkan Skill"}
             </button>
           </div>
@@ -1012,11 +992,11 @@ export function AdminDashboardPage() {
           {fileError && (
             <div
               role="alert"
-              className="rounded border px-3 py-2 text-xs"
+              className="rounded-[10px] border px-3 py-2 text-xs"
               style={{
                 backgroundColor: "var(--danger-bg)",
                 borderColor: "var(--danger)",
-                color: "var(--danger)",
+                color: "var(--danger-text)",
               }}
             >
               {fileError}
@@ -1024,7 +1004,7 @@ export function AdminDashboardPage() {
           )}
 
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--ink-muted)" }}>
+            <h3 className="text-xs font-bold" style={{ color: "var(--ink-muted)" }}>
               File terlampir saat ini
             </h3>
             {filesLoading ? (
@@ -1040,22 +1020,22 @@ export function AdminDashboardPage() {
                 {skillFiles.map((f) => (
                   <li
                     key={f.id}
-                    className="flex items-center justify-between rounded border px-3 py-2 text-xs"
+                    className="flex items-center justify-between rounded-[10px] border px-3 py-2 text-xs"
                     style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
                   >
                     <div>
                       <span className="font-mono font-semibold" style={{ color: "var(--ink)" }}>
                         {f.relative_path}
                       </span>
-                      <span className="ml-2" style={{ color: "var(--ink-muted)" }}>
+                      <span className="ml-2 font-mono" style={{ color: "var(--ink-muted)" }}>
                         ({(f.size_bytes / 1024).toFixed(1)} KB)
                       </span>
                     </div>
                     <button
                       type="button"
                       onClick={() => void handleDeleteSupportFile(f.id)}
-                      className="rounded border px-2 py-1 text-xs font-semibold"
-                      style={{ borderColor: "var(--border)", color: "var(--danger)" }}
+                      className="rounded-lg px-2.5 py-1 text-xs font-semibold"
+                      style={{ backgroundColor: "var(--danger-bg)", color: "var(--danger-text)" }}
                     >
                       Hapus
                     </button>
@@ -1072,9 +1052,10 @@ export function AdminDashboardPage() {
               </h3>
               <label
                 htmlFor="upload-support-file"
-                className="inline-flex min-h-[34px] items-center rounded border px-3 text-xs font-semibold"
-                style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--accent)" }}
+                className="reneo-btn-ghost inline-flex min-h-[34px] items-center gap-1.5 px-3 text-xs font-semibold"
+                style={{ color: "var(--accent-text)" }}
               >
+                <Upload size={13} strokeWidth={1.75} aria-hidden="true" />
                 Unggah dari perangkat
                 <input id="upload-support-file" type="file" onChange={handleUploadLocalSupportFile} className="sr-only" />
               </label>
@@ -1092,8 +1073,7 @@ export function AdminDashboardPage() {
                   value={newFilePath}
                   onChange={(e) => setNewFilePath(e.target.value)}
                   placeholder="scripts/render_pdf.py"
-                  className="min-h-[40px] w-full rounded-md border px-3 font-mono text-xs"
-                  style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                  className="reneo-field min-h-[40px] w-full px-3 font-mono text-xs"
                 />
               </div>
               <div>
@@ -1105,14 +1085,16 @@ export function AdminDashboardPage() {
                   type="text"
                   value={newFileMime}
                   onChange={(e) => setNewFileMime(e.target.value)}
-                  className="min-h-[40px] w-full rounded-md border px-3 font-mono text-xs"
-                  style={{ backgroundColor: "var(--bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                  className="reneo-field min-h-[40px] w-full px-3 font-mono text-xs"
                 />
               </div>
             </div>
 
             {newFileBinary ? (
-              <p className="rounded border p-3 text-xs" style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--ink-body)" }}>
+              <p
+                className="rounded-[10px] border p-3 text-xs"
+                style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--ink-body)" }}
+              >
                 File biner siap diunggah (tersimpan dalam format base64 dan otomatis diekstrak normal di dalam paket ZIP).
               </p>
             ) : (
@@ -1127,19 +1109,14 @@ export function AdminDashboardPage() {
                   value={newFileContent}
                   onChange={(e) => setNewFileContent(e.target.value)}
                   placeholder="Tempelkan isi skrip atau dokumentasi referensi..."
-                  className="w-full rounded-md border p-3 font-mono text-xs"
-                  style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--border)", color: "var(--ink)" }}
+                  className="w-full rounded-[12px] border p-3 font-mono text-xs text-slate-200"
+                  style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
                 />
               </div>
             )}
 
             <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={savingFile}
-                className="min-h-[40px] rounded-md px-4 text-sm font-semibold"
-                style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
-              >
+              <button type="submit" disabled={savingFile} className="reneo-btn-primary min-h-[40px] px-4 text-sm">
                 {savingFile ? "Menyimpan file..." : "Simpan File Pendukung"}
               </button>
             </div>
@@ -1159,19 +1136,14 @@ export function AdminDashboardPage() {
           seluruh file pendukungnya? Tindakan ini tidak dapat dibatalkan.
         </p>
         <div className="mt-5 flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setDeleteTarget(null)}
-            className="min-h-[40px] rounded-md border px-4 text-sm font-medium"
-            style={{ borderColor: "var(--border)", color: "var(--ink-body)" }}
-          >
+          <button type="button" onClick={() => setDeleteTarget(null)} className="reneo-btn-ghost min-h-[40px] px-4 text-sm">
             Batal
           </button>
           <button
             type="button"
             disabled={deleting}
             onClick={() => void handleConfirmDelete()}
-            className="min-h-[40px] rounded-md px-4 text-sm font-semibold"
+            className="min-h-[40px] rounded-[10px] px-4 text-sm font-semibold"
             style={{ backgroundColor: "var(--danger)", color: "#ffffff" }}
           >
             {deleting ? "Menghapus..." : "Hapus Permanen"}

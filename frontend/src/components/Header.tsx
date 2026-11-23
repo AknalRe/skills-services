@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Layers, LogOut, Menu, Moon, Settings2, Sun, X } from "lucide-react";
 import { withBasePath } from "../lib/basePath";
 import type { User } from "../types";
 
@@ -32,72 +33,96 @@ export function Header({ theme, onToggleTheme, user, onLogout }: HeaderProps) {
 
   return (
     <header
-      className="sticky top-0 z-30 border-b"
+      className="sticky top-0 z-30 border-b backdrop-blur-md"
       style={{
-        backgroundColor: "var(--bg)",
+        backgroundColor: "var(--header-bg)",
         borderColor: "var(--border)",
       }}
     >
-      <div className="h-1 w-full" style={{ backgroundColor: "var(--brand)" }} aria-hidden="true" />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex items-center gap-3 no-underline">
-          <img src={withBasePath("/logo.svg")} alt="Reneo Skills" width={34} height={34} className="rounded-md" />
-          <div className="flex flex-col">
-            <span className="text-base font-bold tracking-tight" style={{ color: "var(--ink)" }}>
+          <img
+            src={withBasePath("/logo.svg")}
+            alt="Reneo Skills"
+            width={36}
+            height={36}
+            className="rounded-[10px]"
+          />
+          <div className="flex flex-col leading-tight">
+            <span className="text-[15px] font-bold tracking-tight" style={{ color: "var(--ink)" }}>
               Reneo Skills
             </span>
-            <span className="font-mono text-xs" style={{ color: "var(--ink-muted)" }}>
+            <span className="font-mono text-[11px]" style={{ color: "var(--ink-muted)" }}>
               reneo.my.id
             </span>
           </div>
         </Link>
 
         <nav aria-label="Navigasi utama" className="hidden items-center gap-2 sm:flex">
-          <Link
-            to="/"
-            className="min-h-[40px] inline-flex items-center rounded-md px-3.5 text-sm font-medium transition-colors"
+          <div
+            className="flex items-center gap-1 rounded-[12px] border p-1"
             style={{
-              backgroundColor: isGallery ? "var(--accent-tint)" : "transparent",
-              color: isGallery ? "var(--accent)" : "var(--ink-body)",
+              backgroundColor: "var(--surface)",
+              borderColor: "var(--border)",
             }}
           >
-            Galeri Skill
-          </Link>
-          <Link
-            to="/admin"
-            className="min-h-[40px] inline-flex items-center rounded-md px-3.5 text-sm font-medium transition-colors"
-            style={{
-              backgroundColor: isAdmin ? "var(--accent-tint)" : "transparent",
-              color: isAdmin ? "var(--accent)" : "var(--ink-body)",
-            }}
-          >
-            Panel Admin
-          </Link>
+            <Link
+              to="/"
+              className="inline-flex min-h-[34px] items-center gap-1.5 rounded-[9px] px-3 text-xs font-semibold no-underline transition-colors"
+              style={{
+                backgroundColor: isGallery ? "var(--surface-elevated)" : "transparent",
+                color: isGallery ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: isGallery ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+              }}
+            >
+              <Layers size={14} strokeWidth={1.75} aria-hidden="true" />
+              Galeri Skill
+            </Link>
+            <Link
+              to="/admin"
+              className="inline-flex min-h-[34px] items-center gap-1.5 rounded-[9px] px-3 text-xs font-semibold no-underline transition-colors"
+              style={{
+                backgroundColor: isAdmin ? "var(--surface-elevated)" : "transparent",
+                color: isAdmin ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: isAdmin ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
+              }}
+            >
+              <Settings2 size={14} strokeWidth={1.75} aria-hidden="true" />
+              Panel Admin
+            </Link>
+          </div>
 
           <button
             type="button"
             onClick={onToggleTheme}
             aria-label={theme === "light" ? "Aktifkan mode gelap" : "Aktifkan mode terang"}
-            className="min-h-[40px] rounded-md border px-3 text-sm font-medium transition-colors"
-            style={{
-              borderColor: "var(--border)",
-              backgroundColor: "var(--surface)",
-              color: "var(--ink-body)",
-            }}
+            className="reneo-btn-ghost inline-flex min-h-[38px] items-center gap-1.5 px-3 text-xs font-semibold"
           >
-            {theme === "light" ? "Mode Gelap" : "Mode Terang"}
+            {theme === "light" ? (
+              <>
+                <Moon size={14} strokeWidth={1.75} aria-hidden="true" />
+                Gelap
+              </>
+            ) : (
+              <>
+                <Sun size={14} strokeWidth={1.75} aria-hidden="true" />
+                Terang
+              </>
+            )}
           </button>
 
           {user && (
             <button
               type="button"
               onClick={onLogout}
-              className="min-h-[40px] rounded-md border px-3 text-sm font-medium transition-colors"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[10px] border px-3 text-xs font-semibold transition-colors"
               style={{
                 borderColor: "var(--border)",
-                color: "var(--danger)",
+                backgroundColor: "var(--surface-elevated)",
+                color: "var(--danger-text)",
               }}
             >
+              <LogOut size={14} strokeWidth={1.75} aria-hidden="true" />
               Keluar
             </button>
           )}
@@ -109,14 +134,9 @@ export function Header({ theme, onToggleTheme, user, onLogout }: HeaderProps) {
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-panel"
           aria-label="Buka menu navigasi"
-          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-md border px-3 text-sm font-medium sm:hidden"
-          style={{
-            borderColor: "var(--border)",
-            backgroundColor: "var(--surface)",
-            color: "var(--ink)",
-          }}
+          className="reneo-btn-ghost inline-flex min-h-[42px] min-w-[42px] items-center justify-center sm:hidden"
         >
-          {mobileOpen ? "Tutup" : "Menu"}
+          {mobileOpen ? <X size={18} strokeWidth={1.75} aria-hidden="true" /> : <Menu size={18} strokeWidth={1.75} aria-hidden="true" />}
         </button>
       </div>
 
@@ -126,52 +146,51 @@ export function Header({ theme, onToggleTheme, user, onLogout }: HeaderProps) {
           className="border-t px-4 py-3 sm:hidden"
           style={{
             borderColor: "var(--border)",
-            backgroundColor: "var(--surface)",
+            backgroundColor: "var(--surface-elevated)",
           }}
         >
           <div className="flex flex-col gap-2">
             <Link
               to="/"
-              className="min-h-[44px] flex items-center rounded-md px-3 text-sm font-medium"
+              className="flex min-h-[44px] items-center gap-2 rounded-[10px] px-3 text-sm font-semibold no-underline"
               style={{
                 backgroundColor: isGallery ? "var(--accent-tint)" : "transparent",
-                color: isGallery ? "var(--accent)" : "var(--ink)",
+                color: isGallery ? "var(--accent-text)" : "var(--ink)",
               }}
             >
+              <Layers size={16} strokeWidth={1.75} aria-hidden="true" />
               Galeri Skill
             </Link>
             <Link
               to="/admin"
-              className="min-h-[44px] flex items-center rounded-md px-3 text-sm font-medium"
+              className="flex min-h-[44px] items-center gap-2 rounded-[10px] px-3 text-sm font-semibold no-underline"
               style={{
                 backgroundColor: isAdmin ? "var(--accent-tint)" : "transparent",
-                color: isAdmin ? "var(--accent)" : "var(--ink)",
+                color: isAdmin ? "var(--accent-text)" : "var(--ink)",
               }}
             >
+              <Settings2 size={16} strokeWidth={1.75} aria-hidden="true" />
               Panel Admin
             </Link>
             <button
               type="button"
               onClick={onToggleTheme}
-              className="min-h-[44px] rounded-md border px-3 text-left text-sm font-medium"
-              style={{
-                borderColor: "var(--border)",
-                backgroundColor: "var(--bg)",
-                color: "var(--ink)",
-              }}
+              className="reneo-btn-ghost flex min-h-[44px] items-center gap-2 px-3 text-left text-sm font-medium"
             >
+              {theme === "light" ? <Moon size={16} strokeWidth={1.75} aria-hidden="true" /> : <Sun size={16} strokeWidth={1.75} aria-hidden="true" />}
               {theme === "light" ? "Ubah ke Mode Gelap" : "Ubah ke Mode Terang"}
             </button>
             {user && (
               <button
                 type="button"
                 onClick={onLogout}
-                className="min-h-[44px] rounded-md border px-3 text-left text-sm font-medium"
+                className="flex min-h-[44px] items-center gap-2 rounded-[10px] border px-3 text-left text-sm font-medium"
                 style={{
                   borderColor: "var(--border)",
-                  color: "var(--danger)",
+                  color: "var(--danger-text)",
                 }}
               >
+                <LogOut size={16} strokeWidth={1.75} aria-hidden="true" />
                 Keluar ({user.email})
               </button>
             )}

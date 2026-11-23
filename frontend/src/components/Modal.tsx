@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { X } from "lucide-react";
 
 interface ModalProps {
   open: boolean;
@@ -25,37 +26,33 @@ export function Modal({ open, title, onClose, children, maxWidthClass = "max-w-3
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-[2px] sm:items-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className={`w-full ${maxWidthClass} rounded-lg border shadow-lg`}
+        className={`w-full ${maxWidthClass} overflow-hidden rounded-[20px] border`}
         style={{
-          backgroundColor: "var(--bg)",
+          backgroundColor: "var(--surface-elevated)",
           borderColor: "var(--border)",
+          boxShadow: "var(--modal-shadow)",
         }}
       >
         <div
-          className="flex items-center justify-between border-b px-5 py-3.5"
+          className="flex items-center justify-between border-b px-5 py-4"
           style={{ borderColor: "var(--border)" }}
         >
-          <h2 id="modal-title" className="text-base font-bold" style={{ color: "var(--ink)" }}>
+          <h2 id="modal-title" className="text-[15px] font-bold tracking-tight" style={{ color: "var(--ink)" }}>
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Tutup dialog"
-            className="min-h-[36px] rounded-md border px-3 text-xs font-semibold"
-            style={{
-              borderColor: "var(--border)",
-              backgroundColor: "var(--surface)",
-              color: "var(--ink-body)",
-            }}
+            className="reneo-btn-ghost inline-flex h-8 w-8 items-center justify-center rounded-lg"
           >
-            Tutup
+            <X size={16} strokeWidth={1.75} aria-hidden="true" />
           </button>
         </div>
         <div className="max-h-[82vh] overflow-y-auto p-5">{children}</div>

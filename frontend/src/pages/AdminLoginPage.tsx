@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react";
+import { Lock } from "lucide-react";
 import { api } from "../lib/api";
+import { withBasePath } from "../lib/basePath";
 import type { User } from "../types";
 
 interface AdminLoginPageProps {
@@ -32,28 +34,33 @@ export function AdminLoginPage({ onSuccess }: AdminLoginPageProps) {
 
   return (
     <main className="mx-auto max-w-md px-4 py-14 sm:px-6">
-      <div
-        className="rounded-lg border p-6 sm:p-7"
-        style={{
-          backgroundColor: "var(--surface-elevated)",
-          borderColor: "var(--border)",
-        }}
-      >
-        <h1 className="text-xl font-bold" style={{ color: "var(--ink)" }}>
-          Masuk Panel Admin Skill
-        </h1>
-        <p className="mt-1.5 text-sm" style={{ color: "var(--ink-muted)" }}>
-          Kelola katalog skill, edit dokumentasi SKILL.md, file pendukung, dan status publikasi.
-        </p>
+      <div className="reneo-card p-7">
+        <div className="flex items-center gap-3">
+          <img
+            src={withBasePath("/logo.svg")}
+            alt="Reneo Skills"
+            width={40}
+            height={40}
+            className="rounded-[10px]"
+          />
+          <div>
+            <h1 className="text-lg font-bold tracking-tight" style={{ color: "var(--ink)" }}>
+              Masuk Panel Admin
+            </h1>
+            <p className="text-xs" style={{ color: "var(--ink-muted)" }}>
+              Kelola katalog skill, SKILL.md, dan file pendukung
+            </p>
+          </div>
+        </div>
 
         {error && (
           <div
             role="alert"
-            className="mt-4 rounded-md border px-3.5 py-2.5 text-sm"
+            className="mt-4 rounded-[10px] border px-3.5 py-2.5 text-xs font-medium"
             style={{
               backgroundColor: "var(--danger-bg)",
               borderColor: "var(--danger)",
-              color: "var(--danger)",
+              color: "var(--danger-text)",
             }}
           >
             {error}
@@ -72,12 +79,7 @@ export function AdminLoginPage({ onSuccess }: AdminLoginPageProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@reneo.my.id"
-              className="min-h-[44px] w-full rounded-md border px-3.5 text-sm"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderColor: "var(--border)",
-                color: "var(--ink)",
-              }}
+              className="reneo-field min-h-[42px] w-full px-3.5 text-sm"
             />
           </div>
 
@@ -92,24 +94,16 @@ export function AdminLoginPage({ onSuccess }: AdminLoginPageProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Masukkan kata sandi"
-              className="min-h-[44px] w-full rounded-md border px-3.5 text-sm"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderColor: "var(--border)",
-                color: "var(--ink)",
-              }}
+              className="reneo-field min-h-[42px] w-full px-3.5 text-sm"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="min-h-[44px] w-full rounded-md px-4 text-sm font-semibold"
-            style={{
-              backgroundColor: "var(--accent)",
-              color: "#ffffff",
-            }}
+            className="reneo-btn-primary inline-flex min-h-[42px] w-full items-center justify-center gap-2 px-4 text-sm"
           >
+            <Lock size={14} strokeWidth={1.75} aria-hidden="true" />
             {submitting ? "Memeriksa kredensial..." : "Masuk ke Panel Admin"}
           </button>
         </form>

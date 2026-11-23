@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, Check, Code2, Copy, Download, ExternalLink, FileCode2, FileText } from "lucide-react";
 import { api } from "../lib/api";
 import { withBasePath } from "../lib/basePath";
 import { renderMarkdownToHtml } from "../lib/markdown";
@@ -64,15 +65,7 @@ export function SkillDetailPage() {
   if (loading) {
     return (
       <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div
-          role="status"
-          className="rounded-lg border p-8 text-center text-sm"
-          style={{
-            backgroundColor: "var(--surface)",
-            borderColor: "var(--border)",
-            color: "var(--ink-muted)",
-          }}
-        >
+        <div role="status" className="reneo-card p-10 text-center text-sm" style={{ color: "var(--ink-muted)" }}>
           Memuat dokumentasi skill...
         </div>
       </main>
@@ -82,25 +75,15 @@ export function SkillDetailPage() {
   if (error || !skill) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-        <div
-          role="alert"
-          className="rounded-lg border p-6"
-          style={{
-            backgroundColor: "var(--surface)",
-            borderColor: "var(--border)",
-          }}
-        >
+        <div role="alert" className="reneo-card p-6">
           <h1 className="text-lg font-bold" style={{ color: "var(--ink)" }}>
             Skill tidak tersedia
           </h1>
           <p className="mt-2 text-sm" style={{ color: "var(--ink-body)" }}>
             {error || "Skill yang diminta tidak ditemukan atau masih berstatus draf."}
           </p>
-          <Link
-            to="/"
-            className="mt-4 inline-flex min-h-[40px] items-center rounded-md px-4 text-sm font-semibold"
-            style={{ backgroundColor: "var(--brand)", color: "var(--brand-ink)" }}
-          >
+          <Link to="/" className="reneo-btn-primary mt-4 inline-flex min-h-[40px] items-center gap-2 px-4 text-sm no-underline">
+            <ArrowLeft size={15} strokeWidth={1.75} aria-hidden="true" />
             Kembali ke Galeri Skill
           </Link>
         </div>
@@ -111,34 +94,39 @@ export function SkillDetailPage() {
   const selectedFile = files.find((f) => f.id === selectedFileId) || files[0] || null;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <nav aria-label="Breadcrumb" className="mb-5 text-sm">
-        <Link to="/" className="font-medium hover:underline" style={{ color: "var(--accent)" }}>
+    <main className="mx-auto max-w-6xl px-4 py-7 sm:px-6">
+      <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 font-semibold no-underline hover:underline"
+          style={{ color: "var(--accent-text)" }}
+        >
+          <ArrowLeft size={14} strokeWidth={1.75} aria-hidden="true" />
           Galeri Skill
         </Link>
-        <span className="mx-2" style={{ color: "var(--ink-muted)" }}>
-          /
-        </span>
-        <span className="font-mono text-xs" style={{ color: "var(--ink-muted)" }}>
+        <span style={{ color: "var(--ink-muted)" }}>/</span>
+        <span className="font-mono" style={{ color: "var(--ink-muted)" }}>
           {skill.slug}
         </span>
       </nav>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <div className="border-b pb-6" style={{ borderColor: "var(--border)" }}>
-            <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="space-y-5 lg:col-span-8">
+          <div className="reneo-card p-6">
+            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
               <span
-                className="rounded border px-2 py-0.5 font-semibold"
+                className="rounded-full px-2.5 py-0.5 font-semibold"
                 style={{
-                  backgroundColor: "var(--surface)",
-                  borderColor: "var(--border)",
-                  color: "var(--ink-body)",
+                  backgroundColor: "var(--accent-tint)",
+                  color: "var(--accent-text)",
                 }}
               >
                 {skill.category_name || "Umum"}
               </span>
-              <span className="font-mono" style={{ color: "var(--ink-muted)" }}>
+              <span
+                className="rounded-full px-2.5 py-0.5 font-mono font-medium"
+                style={{ backgroundColor: "var(--surface)", color: "var(--ink-muted)" }}
+              >
                 v{skill.version}
               </span>
               <span style={{ color: "var(--ink-muted)" }}>Oleh {skill.author}</span>
@@ -147,23 +135,29 @@ export function SkillDetailPage() {
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: "var(--ink)" }}>
               {skill.name}
             </h1>
-            <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--ink-body)" }}>
+            <p className="mt-2.5 text-[15px] leading-relaxed" style={{ color: "var(--ink-body)" }}>
               {skill.summary}
             </p>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-2 border-b pb-3" role="tablist" style={{ borderColor: "var(--border)" }}>
+          <div
+            className="inline-flex flex-wrap gap-1 rounded-[12px] border p-1"
+            role="tablist"
+            style={{ backgroundColor: "var(--surface)", borderColor: "var(--border)" }}
+          >
             <button
               type="button"
               role="tab"
               aria-selected={activeTab === "preview"}
               onClick={() => setActiveTab("preview")}
-              className="min-h-[40px] rounded-md px-3.5 text-sm font-semibold"
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "preview" ? "var(--accent-tint)" : "transparent",
-                color: activeTab === "preview" ? "var(--accent)" : "var(--ink-body)",
+                backgroundColor: activeTab === "preview" ? "var(--surface-elevated)" : "transparent",
+                color: activeTab === "preview" ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: activeTab === "preview" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
               }}
             >
+              <FileText size={14} strokeWidth={1.75} aria-hidden="true" />
               Pratinjau SKILL.md
             </button>
             <button
@@ -171,12 +165,14 @@ export function SkillDetailPage() {
               role="tab"
               aria-selected={activeTab === "raw"}
               onClick={() => setActiveTab("raw")}
-              className="min-h-[40px] rounded-md px-3.5 text-sm font-semibold"
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "raw" ? "var(--accent-tint)" : "transparent",
-                color: activeTab === "raw" ? "var(--accent)" : "var(--ink-body)",
+                backgroundColor: activeTab === "raw" ? "var(--surface-elevated)" : "transparent",
+                color: activeTab === "raw" ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: activeTab === "raw" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
               }}
             >
+              <Code2 size={14} strokeWidth={1.75} aria-hidden="true" />
               Markdown Mentah
             </button>
             <button
@@ -184,155 +180,127 @@ export function SkillDetailPage() {
               role="tab"
               aria-selected={activeTab === "files"}
               onClick={() => setActiveTab("files")}
-              className="min-h-[40px] rounded-md px-3.5 text-sm font-semibold"
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-[9px] px-3.5 text-xs font-semibold transition-colors"
               style={{
-                backgroundColor: activeTab === "files" ? "var(--accent-tint)" : "transparent",
-                color: activeTab === "files" ? "var(--accent)" : "var(--ink-body)",
+                backgroundColor: activeTab === "files" ? "var(--surface-elevated)" : "transparent",
+                color: activeTab === "files" ? "var(--accent-text)" : "var(--ink-body)",
+                boxShadow: activeTab === "files" ? "0 1px 3px rgba(15,23,42,0.08)" : "none",
               }}
             >
+              <FileCode2 size={14} strokeWidth={1.75} aria-hidden="true" />
               File Pendukung ({files.length})
             </button>
           </div>
 
-          <div className="mt-5">
-            {activeTab === "preview" && (
-              <div
-                className="md-prose rounded-lg border p-6"
-                style={{
-                  backgroundColor: "var(--surface-elevated)",
-                  borderColor: "var(--border)",
-                }}
-                dangerouslySetInnerHTML={{ __html: renderedHtml }}
-              />
-            )}
+          {activeTab === "preview" && (
+            <div className="reneo-card md-prose p-6" dangerouslySetInnerHTML={{ __html: renderedHtml }} />
+          )}
 
-            {activeTab === "raw" && (
+          {activeTab === "raw" && (
+            <div
+              className="overflow-hidden rounded-[14px] border"
+              style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
+            >
               <div
-                className="rounded-lg border p-4"
-                style={{
-                  backgroundColor: "var(--code-bg)",
-                  borderColor: "var(--border)",
-                }}
+                className="flex items-center justify-between border-b px-4 py-2.5"
+                style={{ borderColor: "var(--code-border)" }}
               >
-                <div className="mb-3 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => void copyText("raw", skill.skill_markdown || "")}
-                    className="min-h-[36px] rounded-md border px-3 text-xs font-semibold"
-                    style={{
-                      backgroundColor: "var(--bg)",
-                      borderColor: "var(--border)",
-                      color: "var(--ink)",
-                    }}
-                  >
-                    {copiedKey === "raw" ? "Tersalin" : "Salin SKILL.md"}
-                  </button>
+                <span className="font-mono text-xs text-slate-300">SKILL.md</span>
+                <button
+                  type="button"
+                  onClick={() => void copyText("raw", skill.skill_markdown || "")}
+                  className="inline-flex items-center gap-1 rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700"
+                >
+                  {copiedKey === "raw" ? <Check size={13} strokeWidth={2} aria-hidden="true" /> : <Copy size={13} strokeWidth={1.75} aria-hidden="true" />}
+                  {copiedKey === "raw" ? "Tersalin" : "Salin"}
+                </button>
+              </div>
+              <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
+                <code>{skill.skill_markdown}</code>
+              </pre>
+            </div>
+          )}
+
+          {activeTab === "files" && (
+            <div>
+              {files.length === 0 ? (
+                <div className="reneo-card p-8 text-center text-sm" style={{ color: "var(--ink-muted)" }}>
+                  Skill ini hanya terdiri dari file utama SKILL.md tanpa skrip atau aset tambahan.
                 </div>
-                <pre className="overflow-x-auto font-mono text-xs leading-relaxed" style={{ color: "var(--ink)" }}>
-                  <code>{skill.skill_markdown}</code>
-                </pre>
-              </div>
-            )}
-
-            {activeTab === "files" && (
-              <div>
-                {files.length === 0 ? (
-                  <div
-                    className="rounded-lg border p-8 text-center text-sm"
-                    style={{
-                      backgroundColor: "var(--surface)",
-                      borderColor: "var(--border)",
-                      color: "var(--ink-muted)",
-                    }}
-                  >
-                    Skill ini hanya terdiri dari file utama SKILL.md tanpa skrip atau aset tambahan.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
-                    <div className="space-y-1.5 sm:col-span-4">
-                      {files.map((f) => {
-                        const active = selectedFile?.id === f.id;
-                        return (
-                          <button
-                            key={f.id}
-                            type="button"
-                            onClick={() => setSelectedFileId(f.id)}
-                            className="w-full rounded-md border px-3 py-2.5 text-left"
-                            style={{
-                              backgroundColor: active ? "var(--accent-tint)" : "var(--surface)",
-                              borderColor: active ? "var(--accent)" : "var(--border)",
-                              color: active ? "var(--accent)" : "var(--ink)",
-                            }}
-                          >
-                            <div className="truncate font-mono text-xs font-semibold">{f.relative_path}</div>
-                            <div className="mt-0.5 text-xs" style={{ color: "var(--ink-muted)" }}>
-                              {(f.size_bytes / 1024).toFixed(1)} KB
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div
-                      className="rounded-lg border p-4 sm:col-span-8"
-                      style={{
-                        backgroundColor: "var(--code-bg)",
-                        borderColor: "var(--border)",
-                      }}
-                    >
-                      {selectedFile && (
-                        <>
-                          <div className="mb-2 flex items-center justify-between border-b pb-2" style={{ borderColor: "var(--border)" }}>
-                            <span className="font-mono text-xs font-semibold" style={{ color: "var(--ink)" }}>
-                              {selectedFile.relative_path}
-                            </span>
-                            <span className="font-mono text-xs" style={{ color: "var(--ink-muted)" }}>
-                              {selectedFile.mime_type}
-                            </span>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
+                  <div className="space-y-1.5 sm:col-span-4">
+                    {files.map((f) => {
+                      const active = selectedFile?.id === f.id;
+                      return (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => setSelectedFileId(f.id)}
+                          className="w-full rounded-[10px] border px-3 py-2.5 text-left transition-colors"
+                          style={{
+                            backgroundColor: active ? "var(--accent-tint)" : "var(--surface-elevated)",
+                            borderColor: active ? "var(--accent-border)" : "var(--border)",
+                            color: active ? "var(--accent-text)" : "var(--ink)",
+                          }}
+                        >
+                          <div className="truncate font-mono text-xs font-semibold">{f.relative_path}</div>
+                          <div className="mt-0.5 font-mono text-[11px]" style={{ color: "var(--ink-muted)" }}>
+                            {(f.size_bytes / 1024).toFixed(1)} KB
                           </div>
-                          {selectedFile.is_binary ? (
-                            <p className="py-6 text-sm" style={{ color: "var(--ink-muted)" }}>
-                              File biner ({(selectedFile.size_bytes / 1024).toFixed(1)} KB). Unduh paket ZIP untuk
-                              mengambil file ini.
-                            </p>
-                          ) : (
-                            <pre className="max-h-[420px] overflow-auto font-mono text-xs leading-relaxed" style={{ color: "var(--ink)" }}>
-                              <code>{selectedFile.content}</code>
-                            </pre>
-                          )}
-                        </>
-                      )}
-                    </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
-              </div>
-            )}
-          </div>
+
+                  <div
+                    className="overflow-hidden rounded-[14px] border sm:col-span-8"
+                    style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
+                  >
+                    {selectedFile && (
+                      <>
+                        <div
+                          className="flex items-center justify-between border-b px-4 py-2.5"
+                          style={{ borderColor: "var(--code-border)" }}
+                        >
+                          <span className="font-mono text-xs font-semibold text-slate-200">
+                            {selectedFile.relative_path}
+                          </span>
+                          <span className="font-mono text-[11px] text-slate-400">{selectedFile.mime_type}</span>
+                        </div>
+                        {selectedFile.is_binary ? (
+                          <p className="p-6 text-sm text-slate-300">
+                            File biner ({(selectedFile.size_bytes / 1024).toFixed(1)} KB). Unduh paket ZIP untuk
+                            mengambil file ini.
+                          </p>
+                        ) : (
+                          <pre className="max-h-[420px] overflow-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
+                            <code>{selectedFile.content}</code>
+                          </pre>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <aside className="space-y-5 lg:col-span-4">
-          <div
-            className="rounded-lg border p-5"
-            style={{
-              backgroundColor: "var(--surface)",
-              borderColor: "var(--border)",
-            }}
-          >
+          <div className="reneo-card p-5">
             <h2 className="text-sm font-bold" style={{ color: "var(--ink)" }}>
               Pasang Skill
             </h2>
             <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--ink-muted)" }}>
-              Unduh arsip ZIP lengkap (berisi SKILL.md dan seluruh file pendukung) atau salin perintah terminal di bawah.
+              Unduh paket ZIP lengkap (SKILL.md dan file pendukung) atau salin perintah terminal di bawah.
             </p>
 
             <a
               href={zipUrl}
-              className="mt-4 flex min-h-[44px] w-full items-center justify-center rounded-md px-4 text-sm font-semibold no-underline"
-              style={{
-                backgroundColor: "var(--accent)",
-                color: "#ffffff",
-              }}
+              className="reneo-btn-primary mt-4 flex min-h-[42px] w-full items-center justify-center gap-2 px-4 text-sm no-underline"
             >
+              <Download size={15} strokeWidth={1.75} aria-hidden="true" />
               Unduh Paket (.zip)
             </a>
 
@@ -340,64 +308,54 @@ export function SkillDetailPage() {
               href={rawUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2.5 flex min-h-[42px] w-full items-center justify-center rounded-md border px-4 text-sm font-medium no-underline"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderColor: "var(--border)",
-                color: "var(--ink)",
-              }}
+              className="reneo-btn-ghost mt-2.5 flex min-h-[40px] w-full items-center justify-center gap-1.5 px-4 text-xs font-semibold no-underline"
             >
+              <ExternalLink size={13} strokeWidth={1.75} aria-hidden="true" />
               Buka SKILL.md Mentah
             </a>
 
-            <div className="mt-5 space-y-3">
+            <div className="mt-5 space-y-3.5">
               <div>
-                <div className="mb-1 flex items-center justify-between">
+                <div className="mb-1.5 flex items-center justify-between">
                   <span className="text-xs font-semibold" style={{ color: "var(--ink-body)" }}>
                     PowerShell (Windows)
                   </span>
                   <button
                     type="button"
                     onClick={() => void copyText("ps", psCommand)}
-                    className="text-xs font-semibold hover:underline"
-                    style={{ color: "var(--accent)" }}
+                    className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
+                    style={{ color: "var(--accent-text)" }}
                   >
+                    {copiedKey === "ps" ? <Check size={12} strokeWidth={2} aria-hidden="true" /> : <Copy size={12} strokeWidth={1.75} aria-hidden="true" />}
                     {copiedKey === "ps" ? "Tersalin" : "Salin"}
                   </button>
                 </div>
                 <pre
-                  className="overflow-x-auto rounded border p-2.5 font-mono text-[11px]"
-                  style={{
-                    backgroundColor: "var(--code-bg)",
-                    borderColor: "var(--border)",
-                    color: "var(--ink)",
-                  }}
+                  className="overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
+                  style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
                 >
                   <code>{psCommand}</code>
                 </pre>
               </div>
 
               <div>
-                <div className="mb-1 flex items-center justify-between">
+                <div className="mb-1.5 flex items-center justify-between">
                   <span className="text-xs font-semibold" style={{ color: "var(--ink-body)" }}>
                     Bash (Linux / macOS)
                   </span>
                   <button
                     type="button"
                     onClick={() => void copyText("bash", bashCommand)}
-                    className="text-xs font-semibold hover:underline"
-                    style={{ color: "var(--accent)" }}
+                    className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
+                    style={{ color: "var(--accent-text)" }}
                   >
+                    {copiedKey === "bash" ? <Check size={12} strokeWidth={2} aria-hidden="true" /> : <Copy size={12} strokeWidth={1.75} aria-hidden="true" />}
                     {copiedKey === "bash" ? "Tersalin" : "Salin"}
                   </button>
                 </div>
                 <pre
-                  className="overflow-x-auto rounded border p-2.5 font-mono text-[11px]"
-                  style={{
-                    backgroundColor: "var(--code-bg)",
-                    borderColor: "var(--border)",
-                    color: "var(--ink)",
-                  }}
+                  className="overflow-x-auto rounded-[10px] border p-3 font-mono text-[11px] text-slate-200"
+                  style={{ backgroundColor: "var(--code-bg)", borderColor: "var(--code-border)" }}
                 >
                   <code>{bashCommand}</code>
                 </pre>
@@ -405,13 +363,7 @@ export function SkillDetailPage() {
             </div>
           </div>
 
-          <div
-            className="rounded-lg border p-5"
-            style={{
-              backgroundColor: "var(--surface-elevated)",
-              borderColor: "var(--border)",
-            }}
-          >
+          <div className="reneo-card p-5">
             <h2 className="text-sm font-bold" style={{ color: "var(--ink)" }}>
               Metadata Paket
             </h2>
@@ -450,7 +402,7 @@ export function SkillDetailPage() {
                 {skill.compatible_agents.map((agent) => (
                   <span
                     key={agent}
-                    className="rounded border px-2 py-0.5 text-xs"
+                    className="rounded-full border px-2.5 py-0.5 text-[11px] font-medium"
                     style={{
                       backgroundColor: "var(--surface)",
                       borderColor: "var(--border)",
@@ -472,7 +424,7 @@ export function SkillDetailPage() {
                   {skill.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded px-2 py-0.5 font-mono text-xs"
+                      className="rounded-md px-2 py-0.5 font-mono text-[11px]"
                       style={{
                         backgroundColor: "var(--surface)",
                         color: "var(--ink-muted)",
